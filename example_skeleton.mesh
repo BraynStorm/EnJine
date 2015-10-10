@@ -1,0 +1,59 @@
+﻿// Example VertexWeights description file.
+{
+	// Not sure about these 3.
+	"vertices" : [
+		[0,0,0],
+		[0,0,0],
+		[0,0,0],
+		[0,0,0]
+		//...
+	],
+	"normals" : [
+		[0,0,0],
+		[0,1,0]
+		//...
+	],
+	"texCoords" : [
+		[0,1],
+		[1,1],
+		[1,0],
+		[0,0]
+		//...
+	],
+	"faces" : [
+		{ "vertices" : [0,2,1], "texCoords" : [1,2,3], "normals" : [1,0,2]}, // Note: can be sequenced. Contains IDs, not coordinates!
+		{ "vertices" : [3,2,0], "texCoords" : [3,2,1], "normals" : [1,2,0]}
+		// ...
+	],
+	"bones" : [
+		{"id" : 0, "position" : [0,0,0], "rotation" : [0,0,0], "parent" : -1}, // Note: if (parrentID < 0) then MAINBONE;
+		{"id" : 1, "position" : [0,0,0], "rotation" : [0,0,0], "parent" :  0},
+		{"id" : 2, "position" : [0,0,0], "rotation" : [0,0,0], "parent" :  1}  // Note: can be sequenced.
+	],
+	"weights" : [
+		{"vertexIndex" : 0, "weight": 1.00}, // Note: sorted by VertexIndex.
+		{"vertexIndex" : 1, "weight": 0.90}, 
+		{"vertexIndex" : 2, "weight": 0.85},
+		{"vertexIndex" : 3, "weight": 0.84}  // Note: can be sequenced.
+		// ...
+	],
+	"poses" : [
+		[ // Pose 1
+			{"boneID" : 0, "position" : [1,1,1], "rotation" : [0,54,0]}, // Note: follows only the parent transformations,
+			{"boneID" : 2, "position" : [1,0,1], "rotation" : [0,30,0]}  // child ones are calculated. Can be sequenced.
+			// bones that haven't changed needn't be specified. They will be automatically set to [0,0,0] on Translation/Rotation.
+			// ...
+		],
+		
+		[ // Pose 2
+			{"boneID" : 1, "position" : [1,0,1.15], "rotation" : [17,0,0]},
+			{"boneID" : 2, "position" : [1,0,0], "rotation" : [22,155,24]}
+			// ...
+		]
+		// ...
+	]
+}
+/* 
+ * 
+ * 
+ */
