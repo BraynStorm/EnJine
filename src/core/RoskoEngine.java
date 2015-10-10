@@ -156,7 +156,7 @@ public class RoskoEngine {
 			camera.setTranslationMatrix();
 			camera.setRotationMatrix();
 			pEffect.render();
-			
+			PET.setTranslationZ(PET.getTranslation().z-.001f);
 			
 			//PET.setTranslationX((float)(Time.getNano() / 1e10));
 			

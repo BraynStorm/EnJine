@@ -27,8 +27,8 @@ public class ParticleEffectCircleShower extends ParticleEffect {
 	private static Comparator<Particle> particleComparator = new Comparator<Particle>(){
 		@Override
 		public int compare(Particle a, Particle b) {
-			float distA = Vector3f.getDistanceSquared(a.transform.getTranslation(), RoskoEngine.camera.getPosition());
-			float distB = Vector3f.getDistanceSquared(b.transform.getTranslation(), RoskoEngine.camera.getPosition());
+			float distA = Vector3f.getDistanceSquared(a.particleTransform.getTranslation(), RoskoEngine.camera.getPosition());
+			float distB = Vector3f.getDistanceSquared(b.particleTransform.getTranslation(), RoskoEngine.camera.getPosition());
 			
 			if(distA < distB)
 				return 1;
@@ -55,7 +55,6 @@ public class ParticleEffectCircleShower extends ParticleEffect {
 	@Override
 	public void render() {
 		Shader.currentlyBound.setUniform("particleOriginTransform", origin.getTransformation());
-		particles.sort(particleComparator);
 		
 		if(particles.size() < maxParticles)
 			spawnParticles();
@@ -75,7 +74,7 @@ public class ParticleEffectCircleShower extends ParticleEffect {
 				ParticlePoint pp = shape.getPointAt(age / maxLifespan, angle);
 				particleTransform.setTranslation(pp.position);
 				particleTransform.setRotation(new Vector3f(RoskoEngine.camera.getRotationX(),-RoskoEngine.camera.getRotationY(), 0));
-				p.origin = origin;
+				p.originTransform = origin;
 				p.render();
 			}
 		}

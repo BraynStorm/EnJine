@@ -1,1 +1,4 @@
 ﻿lib/
+bin/core/
+bin/org/
+bin/logs

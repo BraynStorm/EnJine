@@ -21,8 +21,8 @@ public class Particle{
 	
 	public Vector3f color;
 	public Texture texture;
-	public MeshTransform transform;
-	public MeshTransform origin;
+	public MeshTransform particleTransform;
+	public MeshTransform originTransform;
 	
 	public Particle(int textureID){ this(textureID, new Vector3f(1, 1, 1)); }
 	public Particle(int textureID, Vector3f color){
@@ -43,19 +43,19 @@ public class Particle{
 	public Particle(Particle copy){
 		color = new Vector3f(copy.color);
 		texture = copy.texture;
-		transform = copy.transform;
+		particleTransform = copy.particleTransform;
 		timeCreated = copy.timeCreated;
 	}
 	
 	public Particle setTransform(MeshTransform transform){
-		this.transform = transform;
+		this.particleTransform = transform;
 		return this;
 	}
 	
 	public void render(){
 		texture.bind();
-		Shader.currentlyBound.setUniform("particleOriginTransform", origin.getTransformation());
-		Shader.currentlyBound.setUniform("particleTransform", transform.getTransformation());
+		Shader.currentlyBound.setUniform("particleOriginTransform", originTransform.getTransformation());
+		Shader.currentlyBound.setUniform("particleTransform", particleTransform.getTransformation());
 		Shader.currentlyBound.setUniform("particleColor", color);
 		Common.renderBO(Rectangle.getVBO(Origin.CENTER), Rectangle.getIBO(), Rectangle.getDrawCount());
 	}
@@ -74,7 +74,7 @@ public class Particle{
 		
 		Particle p = (Particle) obj;
 		
-		return transform.equals(p.transform)
+		return particleTransform.equals(p.particleTransform)
 				&& texture.equals(p.texture)
 				&& color.equals(p.color)
 				&& timeCreated == p.timeCreated; // Almost forgot the most important one;
