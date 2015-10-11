@@ -5,7 +5,6 @@ import java.awt.Font;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
-import core.event.EventManager;
 import core.gl.Camera;
 import core.gl.FPSManager;
 import core.gl.LightDirectional;
@@ -19,13 +18,15 @@ import core.gl.Shader;
 import core.gl.Texture;
 import core.gl.Window;
 import core.gl.gui.GUIButton;
-import core.gl.particles.ParticleEffectCircleShower;
+import core.gl.particles.ParticleEmitter;
+import core.gl.particles.ParticleHolder;
+import core.gl.particles.ParticleTransform;
+import core.gl.particles.tests.ParticleEmitterCannon;
+import core.gl.particles.tests.ParticleSystemCannon;
 import core.gl.storage.FontLibrary;
-import core.math.Matrix4f;
 import core.math.Time;
-import core.resources.MeshLoader;
+import core.math.Vector3f;
 import core.resources.ResourceManager;
-import core.resources.TextureLoader;
 
 public class RoskoEngine {
 	public static Shader guiShader;
@@ -33,6 +34,7 @@ public class RoskoEngine {
 	public static Shader particleShader;
 	
 	public static Camera camera;
+	public static Time timer = new Time();
 	
 	private static boolean running = false;
 	
@@ -106,32 +108,9 @@ public class RoskoEngine {
 		Texture.unbind();
 		
 		camera = new Camera();
-		
-		TransformTTF t = new TransformTTF();
-		TransformTTF t2 = new TransformTTF();
-		
-		GUIButton button = new GUIButton(1);
-		Rectangle rect = new Rectangle(new TransformRectangle().setTranslationX(100).setTranslationY(200).setWidth(50).setHeight(10));
-		TrueTypeFont verdana = FontLibrary.requestFontWithSize("verdana", Font.TRUETYPE_FONT, 28);
-		
-		MeshTransform humanTransform = new MeshTransform();
-		MeshTransform zeroTransform = new MeshTransform();
-		MeshTransform PET = new MeshTransform();
-		
-		Mesh human = ResourceManager.getInstance().getMesh(0);
-		
-		ParticleEffectCircleShower pEffect = new ParticleEffectCircleShower(PET, 200, 10000);
-		PET.setTranslationZ(3);
-		PET.setTranslationY(-0.5f);
 		LightDirectional sun = LightDirectional.getSun();
 		
-		t.setTranslationX(0).setTranslationY((int)Window.getHeight());
-		humanTransform.setTranslationZ(3);
-		
-		
-		button.getTransform().setTranslationX(10).setTranslationY(10).setWidth(188).setHeight(51);
-		
-		
+		timer.loop();
 		while(!Window.shouldClose() && running){
 			
 			/* FPS Limit */
@@ -143,32 +122,22 @@ public class RoskoEngine {
 			FPSManager.startFrame();
 			Window.beginDrawing();
 			
-			
-			
 			worldShader.bind();
 			worldShader.setUniform("projection_matrix", Window.getProjectionMatrix());
 			sun.use();
 			camera.loop();
-			human.render(humanTransform);
 			
 			particleShader.bind();
 			particleShader.setUniform("projection_matrix", Window.getProjectionMatrix());
 			camera.setTranslationMatrix();
 			camera.setRotationMatrix();
-			pEffect.render();
-			PET.setTranslationZ(PET.getTranslation().z-.001f);
 			
-			//PET.setTranslationX((float)(Time.getNano() / 1e10));
-			
-			//xyz.render(zeroTransform);
 			
 			guiShader.bind();
-			//rect.render();
-			//verdana.drawString(t, FPSManager.getFPS(), GLColor.TRANSPARENT);
-			button.render();
 			
 			Window.endDrawing();
 			FPSManager.endFrame();
+			timer.loop();
 		}
 	}
 	

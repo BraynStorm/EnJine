@@ -1,5 +1,7 @@
 package core.math;
 
+import java.util.Arrays;
+
 import com.google.common.eventbus.Subscribe;
 
 import core.event.types.WindowSizeEvent;
@@ -143,4 +145,28 @@ public class Matrix4f {
 		
 		return this;		
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.deepHashCode(m);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Matrix4f other = (Matrix4f) obj;
+		if (!Arrays.deepEquals(m, other.m))
+			return false;
+		return true;
+	}
+	
+	
 }

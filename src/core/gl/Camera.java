@@ -195,7 +195,7 @@ public class Camera {
 	}
 	
 	public Vector3f getLeft(){
-		return up.cross(forward).normalize(); // deabtable
+		return up.cross(forward).normalize();
 	}
 	
 	public Vector3f getRight(){

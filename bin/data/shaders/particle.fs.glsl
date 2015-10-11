@@ -3,9 +3,6 @@
 uniform sampler2D diffuse;
 uniform vec3 particleColor;
 
-//uniform vec4 sunlight_color;
-//uniform vec3 sunlight_direction;
-
 in vec2 texCoord0;
 
 vec4 blend(vec4 f, vec4 b){

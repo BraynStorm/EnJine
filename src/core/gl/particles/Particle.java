@@ -5,78 +5,66 @@ import core.gl.Origin;
 import core.gl.Rectangle;
 import core.gl.Shader;
 import core.gl.Texture;
-import core.math.Time;
-import core.math.Vector3f;
-import core.resources.ResourceManager;
+import core.gl.Transformable;
 import core.utils.Common;
 
-/**
- * Default origin - {@link Origin.CENTER}
- * Default color - #FFFFFF
- * @author BraynStorm
- *
- */
-public class Particle{
-	private long timeCreated;
+public class Particle implements Transformable {
+	protected Texture texture;
+	protected ParticleTransform transform;
 	
-	public Vector3f color;
-	public Texture texture;
-	public MeshTransform particleTransform;
-	public MeshTransform originTransform;
-	
-	public Particle(int textureID){ this(textureID, new Vector3f(1, 1, 1)); }
-	public Particle(int textureID, Vector3f color){
-		this.texture = ResourceManager.getInstance().getTexture(textureID);
-		this.color = color;
-		
-		timeCreated = Time.getMilli();
-	}
-	
-	public Particle(Texture texture){ this(texture, new Vector3f(1, 1, 1)); }
-	public Particle(Texture texture, Vector3f color){
+	public Particle(Texture texture){
 		this.texture = texture;
-		this.color = color;
-		
-		timeCreated = Time.getMilli();
 	}
 	
-	public Particle(Particle copy){
-		color = new Vector3f(copy.color);
-		texture = copy.texture;
-		particleTransform = copy.particleTransform;
-		timeCreated = copy.timeCreated;
-	}
-	
-	public Particle setTransform(MeshTransform transform){
-		this.particleTransform = transform;
-		return this;
+	public Particle(Texture texture, ParticleTransform transform){
+		this.texture = texture;
+		this.transform = new ParticleTransform(transform);
 	}
 	
 	public void render(){
-		texture.bind();
-		Shader.currentlyBound.setUniform("particleOriginTransform", originTransform.getTransformation());
-		Shader.currentlyBound.setUniform("particleTransform", particleTransform.getTransformation());
-		Shader.currentlyBound.setUniform("particleColor", color);
+		Texture.bind(texture);
+		Shader.currentlyBound.setUniform("particleTransform", transform.getTransformation());
 		Common.renderBO(Rectangle.getVBO(Origin.CENTER), Rectangle.getIBO(), Rectangle.getDrawCount());
 	}
 	
-	public int getAge(){
-		return (int)(Time.getMilli() - timeCreated);
+	@Override
+	public MeshTransform getTransform() {
+		return transform;
 	}
 	
 	@Override
-	public boolean equals(Object obj) {
-		if(obj == null)
-			return false;
-		
-		if(!obj.getClass().equals(this.getClass()))
-			return false;
-		
-		Particle p = (Particle) obj;
-		
-		return particleTransform.equals(p.particleTransform)
-				&& texture.equals(p.texture)
-				&& color.equals(p.color)
-				&& timeCreated == p.timeCreated; // Almost forgot the most important one;
+	public void transformationOccured() {}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((texture == null) ? 0 : texture.hashCode());
+		result = prime * result + ((transform == null) ? 0 : transform.hashCode());
+		return result;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Particle other = (Particle) obj;
+		if (texture == null) {
+			if (other.texture != null)
+				return false;
+		} else if (!texture.equals(other.texture))
+			return false;
+		if (transform == null) {
+			if (other.transform != null)
+				return false;
+		} else if (!transform.equals(other.transform))
+			return false;
+		return true;
+	}
+	
+	
 }

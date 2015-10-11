@@ -49,4 +49,37 @@ public class Texture {
 		defaultTexture.bind();
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((format == null) ? 0 : format.hashCode());
+		result = prime * result + height;
+		result = prime * result + textureID;
+		result = prime * result + width;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Texture other = (Texture) obj;
+		if (format != other.format)
+			return false;
+		if (height != other.height)
+			return false;
+		if (textureID != other.textureID)
+			return false;
+		if (width != other.width)
+			return false;
+		return true;
+	}
+	
 }
+
+

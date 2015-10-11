@@ -9,6 +9,8 @@ public class FPSManager {
 	static float frames = 0;
 	static float time = 0.0001f;
 	
+	static Time timer = new Time();
+	
 	public static boolean shouldDrawFrame(){
 		return fps < Defaults.FPS_CAP;
 	}
@@ -18,12 +20,12 @@ public class FPSManager {
 			time = 0;
 			frames = 0;
 		}
-		Time.loop();
+		timer.loop();
 	}
 
 	public static void endFrame(){
 		frames++;
-		time += Time.getDeltaSeconds();
+		time += timer.getDeltaSeconds();
 		fps = (float) frames / time;
 	}
 
@@ -33,6 +35,6 @@ public class FPSManager {
 	
 	@Override
 	public String toString(){
-		return String.format("FPS: %i", (int)fps);
+		return "FPS: " + (int)fps;
 	}
 }

@@ -1,15 +1,15 @@
 package core.math;
 
-import core.gl.Transform;
+import core.gl.AbstractTransform;
 
 public class Spiral {
 	private float height;
 	private float angle;
 	private float radius;
 	
-	public Transform transform;
+	public AbstractTransform transform;
 
-	public Spiral(float height, float angle, float radius, Transform transform) {
+	public Spiral(float height, float angle, float radius, AbstractTransform transform) {
 		this.height = height;
 		this.angle = angle;
 		this.radius = radius;

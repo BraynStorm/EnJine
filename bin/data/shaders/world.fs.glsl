@@ -28,13 +28,13 @@ void main(){
 	vec4 pixel = texture2D(diffuse, texCoord0);
 	
 	if(pixel.w == 0){
-		pixel = color;
+		pixel = vec4(material.diffuseColor, 1);
 	}else{
-		pixel = blend(pixel, color);
+		pixel = blend(pixel, vec4(material.diffuseColor, 1));
 	}
 
 	float intensity = clamp(dot(normalize(-sunlight_direction), normalize(normal0)) + ambient, 0, 1);
 	
-	gl_FragColor = vec4(material.diffuseColor * intensity, 1) ;// * vec4(sunlight_color.xyz * intensity, 1);
+	gl_FragColor = vec4(pixel.xyz * intensity, 1) ;// * vec4(sunlight_color.xyz * intensity, 1);
 	
 }

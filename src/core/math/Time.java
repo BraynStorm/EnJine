@@ -1,26 +1,26 @@
 package core.math;
 
 public class Time {
-	private static long lastTime = 0;
+	private long lastTime = 0;
 	
 	
-	public static void loop(){
+	public void loop(){
 		lastTime = System.nanoTime();
 	}
 	
-	public static double getDelta(){
+	public double getDelta(){
 		return System.nanoTime() - lastTime;
 	}
 	
-	public static double getDeltaSeconds(){
-		return getDelta() / 1000000000;
+	public double getDeltaSeconds(){
+		return getDelta() / 1e9;
 	}
 	
-	public static long getNano(){
+	public long getNano(){
 		return System.nanoTime();
 	}
 	
-	public static long getMilli(){
+	public long getMilli(){
 		return (long) (getNano() / 1e6);
 	}
 }

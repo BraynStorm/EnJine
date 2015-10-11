@@ -7,7 +7,7 @@ import core.event.types.WindowSizeEvent;
 import core.math.Matrix4f;
 import core.math.Vector3f;
 
-public class TransformRectangle extends Transform {
+public class TransformRectangle extends AbstractTransform {
 	
 	/**
 	 * In Pixels.

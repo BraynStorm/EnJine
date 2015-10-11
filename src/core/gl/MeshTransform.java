@@ -3,7 +3,7 @@ package core.gl;
 import core.math.Matrix4f;
 import core.math.Vector3f;
 
-public class MeshTransform extends Transform {
+public class MeshTransform extends AbstractTransform {
 
 	public MeshTransform(){
 		super();
@@ -22,20 +22,22 @@ public class MeshTransform extends Transform {
 		transformation = t.mul(r.mul(s));
 	}
 	
-	public Transform setTranslation(Vector3f translation) { this.translation = translation; recalculateMatrix(); return this; }
-	public Transform setRotation(Vector3f rotation) { this.rotation = rotation; recalculateMatrix(); return this; }
-	public Transform setScale(Vector3f scale) { this.scale = scale; recalculateMatrix(); return this; }
-	public Transform setScale(float s) { this.scale = new Vector3f(s, s, s); recalculateMatrix(); return this; }
 	
-	public Transform setTranslationX(float x) { this.translation.x = x; recalculateMatrix(); return this; }
-	public Transform setTranslationY(float y) { this.translation.y = y; recalculateMatrix(); return this; }
-	public Transform setTranslationZ(float z) { this.translation.z = z; recalculateMatrix(); return this; }
+	public MeshTransform setTranslationX(float x){ translation.x = x; recalculateMatrix(); return this; }
+	public MeshTransform setTranslationY(float y){ translation.y = y; recalculateMatrix(); return this; }
+	public MeshTransform setTranslationZ(float z){ translation.z = z; recalculateMatrix(); return this; }
+	public MeshTransform setTranslation(Vector3f t){ translation = new Vector3f(t); recalculateMatrix(); return this; }
 	
-	public Transform setRotationX(float x) { this.rotation.x = x; recalculateMatrix(); return this; }
-	public Transform setRotationY(float y) { this.rotation.y = y; recalculateMatrix(); return this; }
-	public Transform setRotationZ(float z) { this.rotation.z = z; recalculateMatrix(); return this; }
+	public MeshTransform setRotationX(float x){ rotation.x = x; recalculateMatrix(); return this; }
+	public MeshTransform setRotationZ(float y){ rotation.y = y; recalculateMatrix(); return this; }
+	public MeshTransform setRotationY(float z){ rotation.z = z; recalculateMatrix(); return this; }
+	public MeshTransform setRotation(Vector3f r){ rotation = new Vector3f(r); recalculateMatrix(); return this; }
 	
-	public Transform setScaleX(float x) { this.scale.x = x; recalculateMatrix(); return this; }
-	public Transform setScaleY(float y) { this.scale.y = y; recalculateMatrix(); return this; }
-	public Transform setScaleZ(float z) { this.scale.z = z; recalculateMatrix(); return this; }
+	public MeshTransform setScaleX(float x){ scale.x = x; recalculateMatrix(); return this; }
+	public MeshTransform setScaleY(float y){ scale.y = y; recalculateMatrix(); return this; }
+	public MeshTransform setScaleZ(float z){ scale.z = z; recalculateMatrix(); return this; }
+	public MeshTransform setScale(Vector3f s){ scale = new Vector3f(s); recalculateMatrix(); return this; }
+	public MeshTransform setScale(float s) { scale = new Vector3f(s,s,s); recalculateMatrix(); return this; }
+	
+	
 }
