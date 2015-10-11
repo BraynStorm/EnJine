@@ -1,4 +1,4 @@
-package core;
+package roskoengine.core;
 
 public class Engine implements Runnable{
 

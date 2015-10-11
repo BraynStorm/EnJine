@@ -8,11 +8,15 @@ import java.util.Scanner;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import core.gl.GLColor;
-import core.gl.__particles.Particle;
-import core.math.Vector3f;
+import core.gl.particles.Particle;
 import core.utils.Common;
 
+/**
+ * DEPRECATED. Use {@link ResourceManager}.
+ * @author BraynStorm
+ *
+ */
+@Deprecated
 public class ParticleLoader {
 	public static final String path = Common.dataFolder;
 	

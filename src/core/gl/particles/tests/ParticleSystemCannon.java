@@ -1,9 +1,9 @@
 package core.gl.particles.tests;
 
-import core.RoskoEngine;
 import core.gl.particles.ParticleSystem;
 import core.gl.particles.ParticleTransform;
 import core.math.Vector3f;
+import roskoengine.core.RoskoEngine;
 
 public class ParticleSystemCannon extends ParticleSystem{
 	

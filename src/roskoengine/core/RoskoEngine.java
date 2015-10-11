@@ -1,6 +1,4 @@
-package core;
-
-import java.awt.Font;
+package roskoengine.core;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
@@ -8,24 +6,11 @@ import org.lwjgl.opengl.GL20;
 import core.gl.Camera;
 import core.gl.FPSManager;
 import core.gl.LightDirectional;
-import core.gl.Mesh;
-import core.gl.MeshTransform;
 import core.gl.Rectangle;
-import core.gl.TransformRectangle;
-import core.gl.TransformTTF;
-import core.gl.TrueTypeFont;
 import core.gl.Shader;
 import core.gl.Texture;
 import core.gl.Window;
-import core.gl.gui.GUIButton;
-import core.gl.particles.ParticleEmitter;
-import core.gl.particles.ParticleHolder;
-import core.gl.particles.ParticleTransform;
-import core.gl.particles.tests.ParticleEmitterCannon;
-import core.gl.particles.tests.ParticleSystemCannon;
-import core.gl.storage.FontLibrary;
 import core.math.Time;
-import core.math.Vector3f;
 import core.resources.ResourceManager;
 
 public class RoskoEngine {
