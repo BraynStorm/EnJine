@@ -39,7 +39,7 @@ public class Enjine {
 		
 		worldShader = new Shader();
 		worldShader.loadShader("world");
-		// TODO: picking Color worldShader.addUniform("color");
+		// TODO: picking Color for selecting 3D objects:  worldShader.addUniform("color");
 		worldShader.addUniform("transform");
 		worldShader.addUniform("camera_translation");
 		worldShader.addUniform("camera_rotation");
