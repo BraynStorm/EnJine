@@ -12,7 +12,7 @@ import enjine.core.gl.Texture;
 import enjine.core.logging.Logger;
 import enjine.core.logging.Logger.LogLevel;
 import enjine.core.utils.Common;
-
+@Deprecated
 public class ResourceManager {
 	
 	private HashMap<String, Texture> mapGuiTextures;
