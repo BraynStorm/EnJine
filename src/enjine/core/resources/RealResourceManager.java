@@ -1,10 +1,16 @@
 package enjine.core.resources;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.List;
 
 import enjine.core.gl.FullBlownModel;
 import enjine.core.gl.Mesh;
 import enjine.core.gl.Texture;
+import enjine.core.logging.Logger;
+import enjine.core.logging.Logger.LogLevel;
 import enjine.core.utils.Common;
 
 /**
@@ -24,18 +30,37 @@ public class RealResourceManager {
 	private static HashMap<String, FullBlownModel> modelMap;
 	
 	/**
-	 * Loades a new .mesh file.
-	 * @param path The path to the model file counted from {@link Common#dataFolder} inwards (ex: meshes/blah.model will represent the file JARLOCATION/data/meshes/blah.model).
+	 * Loades a new .obj file and converts it to a .mesh json file. 
+	 * @param objPath The path to the .obj file.
 	 */
-	private static void loadMesh(String path){
-		path = Common.makeAbsoluteDataPath(path);
+	private static void convertObj(String objPath){
+		objPath = Common.makeAbsoluteDataPath(objPath);
+		List<String> listLines = null;
+		try {
+			listLines = Files.readAllLines(new File(objPath).toPath());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		if(listLines == null)
+			String lines = Common.combineStringList(listLines);
+		
+		if(lines.equals("")){
+			Logger.getInstance().log(LogLevel.CRITICAL, "File " + objPath + " isn't a valid OBJ file.");
+			new Exception().printStackTrace();
+			System.exit(0);
+		}
+		
 	}
 	
 	/**
 	 * Loades a new .model file.
-	 * @param path The path to the model file counted from {@link Common#dataFolder} inwards (ex: meshes/blah.model will represent the file JARLOCATION/data/meshes/blah.model).
+	 * @param objPath The path to the .obj
+	 * @param mtlPath The path to the .mtl
 	 */
-	private static void loadModel(String path){
-		path = Common.makeAbsoluteDataPath(path);
+	private static void loadModel(String modelPath){
+		modelPath = Common.makeAbsoluteDataPath(modelPath);
+		
+		
 	}
 }

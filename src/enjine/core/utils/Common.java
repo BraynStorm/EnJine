@@ -1,8 +1,10 @@
 package enjine.core.utils;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -14,6 +16,8 @@ import org.lwjgl.opengl.GL20;
 
 import enjine.core.gl.GLColor;
 import enjine.core.gl.TransformRectangle;
+import enjine.core.logging.Logger;
+import enjine.core.logging.Logger.LogLevel;
 import enjine.core.math.Vertex;
 
 public class Common {
@@ -136,8 +140,53 @@ public class Common {
 		return finalBuffer;
 	}
 	
+	
+	/**
+	 * Combines a {@link List<String>} to a single String separating every element with a new line (\n).
+	 * @param list The {@link List}
+	 * @return The combined elements of the List.
+	 */
+	public static String combineStringList(List<String> list){
+		if(list.isEmpty())
+			return "";
+		
+		StringBuilder sb = new StringBuilder(list.size() * 4); // Arbitrary number but its more optimized that way (or so I am told).
+		
+		list.forEach(e ->{
+			sb.append(e).append('\n');
+		});
+		
+		return sb.toString();
+	}
+	
+	/**
+	 * Reads all the lines in a single text file.
+	 * @param path Absolute path to the file.
+	 * @return A string that contains all lines of the file.
+	 * @throws IOException {@link Files#readAllLines(java.nio.file.Path)}
+	 */
+	public static String readAllLines(String path) throws IOException{
+		return combineStringList(Files.readAllLines(new File(path).toPath()));
+	}
+	
+	
+	/** {@link Common#killProgram(String)} with no msg part. */
+	public static void killProgram(){ killProgram(""); }
+	
+	/**
+	 * Throws a new exception and {@link System#exit(int)}. Also logs the message passed as {@link LogLevel#CRITICAL}.
+	 */
+	public static void killProgram(String msg){
+		Logger.getInstance().log(LogLevel.CRITICAL, msg);
+		new Exception().printStackTrace();
+		System.exit(0);
+	}
+	
+	
+	
 	/** Renders a VBO/IBO/DrawCount pair on the screen. See {@link Common#renderBO(int, int, int, boolean)} for more information. */
 	public static void renderBO(int vbo, int ibo, int drawCount){ renderBO(vbo, ibo, drawCount, false); }
+	
 	
 	/**
 	 * Renders a VBO/IBO/drawCount pair on the screen.
