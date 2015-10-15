@@ -5,9 +5,10 @@ import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.file.Files;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Consumer;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
@@ -17,7 +18,6 @@ import org.lwjgl.opengl.GL20;
 import enjine.core.gl.GLColor;
 import enjine.core.gl.TransformRectangle;
 import enjine.core.logging.Logger;
-import enjine.core.logging.Logger.LogLevel;
 import enjine.core.math.Vertex;
 
 public class Common {
@@ -37,29 +37,6 @@ public class Common {
 	private static float greenProgress = 0;
 	private static float blueProgress = 0;
 	
-	/**
-	 * Aqquires a unique color for the picking phase. Every object that calls this method must save the given color as it gets counted as 'taken'.
-	 * @return A unique {@link GLColor}
-	 */
-	public static GLColor aqquirePickingColor(){
-		redProgress++;
-		
-		if(redProgress > 255){
-			redProgress = 0;
-			greenProgress++;
-		}
-		
-		if(greenProgress > 255){
-			greenProgress = 0;
-			blueProgress++;
-		}
-		
-		if(blueProgress > 255){
-			throw new RuntimeException("[Error][Crit][Impossibru] Ran out of picking colors. What the actual fuck?");
-		}
-		
-		return new GLColor(redProgress / 255, greenProgress / 255, blueProgress / 255, 1);
-	}
 	
 	/** Simplified {@link Common#bufferData(FloatBuffer, int, int)}. Creates a new buffer and drawDynamic = {@link GL15.GL_STATIC_DRAW}. */
 	public static int bufferData(FloatBuffer data, int type)					{ return bufferData(GL15.glGenBuffers(), data, type, GL15.GL_STATIC_DRAW); }
@@ -165,28 +142,45 @@ public class Common {
 	 * @return A string that contains all lines of the file.
 	 * @throws IOException {@link Files#readAllLines(java.nio.file.Path)}
 	 */
-	public static String readAllLines(String path) throws IOException{
+	public static String readAllLinesToString(String path) throws IOException{
 		return combineStringList(Files.readAllLines(new File(path).toPath()));
 	}
 	
+	/**
+	 * Reads all the lines in a single text file.
+	 * @param path Absolute path to the file.
+	 * @return A string that contains all lines of the file.
+	 * @throws IOException {@link Files#readAllLines(java.nio.file.Path)}
+	 */
+	public static List<String> readAllLines(String path) throws IOException{
+		return Files.readAllLines(new File(path).toPath());
+	}
+	
+	/**
+	 * Cycles over every line in a {@link String}.
+	 * @param string The string to be cycled over.
+	 * @param consumer 
+	 */
+	public static void forEachLine(String string, Consumer<String> consumer){
+		List<String> list = Arrays.asList(string.split("\n"));
+		list.forEach(consumer);
+	}
 	
 	/** {@link Common#killProgram(String)} with no msg part. */
 	public static void killProgram(){ killProgram(""); }
-	
+	/** {@link Common#killProgram(Exception)} with a String rather than Exception. */
+	public static void killProgram(String msg){ killProgram(new Exception(msg)); }
 	/**
-	 * Throws a new exception and {@link System#exit(int)}. Also logs the message passed as {@link LogLevel#CRITICAL}.
+	 * Kills the game/program.
+	 * @param e The {@link Exception} that was thrown in order to kill the program.
 	 */
-	public static void killProgram(String msg){
-		Logger.getInstance().log(LogLevel.CRITICAL, msg);
-		new Exception().printStackTrace();
+	public static void killProgram(Exception e){
+		Logger.getInstance().log(e);
 		System.exit(0);
 	}
 	
-	
-	
 	/** Renders a VBO/IBO/DrawCount pair on the screen. See {@link Common#renderBO(int, int, int, boolean)} for more information. */
 	public static void renderBO(int vbo, int ibo, int drawCount){ renderBO(vbo, ibo, drawCount, false); }
-	
 	
 	/**
 	 * Renders a VBO/IBO/drawCount pair on the screen.
@@ -216,10 +210,31 @@ public class Common {
 	 * @param relativePath
 	 * @return The absolute version of the given path.
 	 */
-	public static String makeAbsoluteDataPath(String relativePath){
-		return dataFolder + relativePath;
-	}
+	public static String makeAbsoluteDataPath(String relativePath){ return dataFolder + relativePath; }
 	
+	/**
+	 * Aqquires a unique color for the picking phase. Every object that calls this method must save the given color as it gets counted as 'taken'.
+	 * @return A unique {@link GLColor}
+	 */
+	public static GLColor aqquirePickingColor(){
+		redProgress++;
+		
+		if(redProgress > 255){
+			redProgress = 0;
+			greenProgress++;
+		}
+		
+		if(greenProgress > 255){
+			greenProgress = 0;
+			blueProgress++;
+		}
+		
+		if(blueProgress > 255){
+			throw new RuntimeException("[Error][Crit][Impossibru] Ran out of picking colors. What the actual fuck?");
+		}
+		
+		return new GLColor(redProgress / 255, greenProgress / 255, blueProgress / 255, 1);
+	}
 	
 	/**
 	 * Picks a pseudo-random color.
@@ -261,6 +276,7 @@ public class Common {
 				x <= transform.getWidth() + transform.getXPosition() &&
 				y <= transform.getHeight() + transform.getYPosition();
 	}
+	
 	/**
 	 * Checks if a given float value is clamped to the given min/max values
 	 * @param src The float value that's being checked.

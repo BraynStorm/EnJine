@@ -115,11 +115,12 @@ public class OBJ {
 						
 						break;
 				}
+				
 			}
-		}
-		
-		m = MaterialLoader.loadMaterial(path.replace(".obj", ".mtl"));
-		
 		r.close();
 	}
+		//m = MaterialLoader.loadMaterial(path.replace(".obj", ".mtl"));
+		
+		
+	
 }

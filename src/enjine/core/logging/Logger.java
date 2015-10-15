@@ -25,6 +25,10 @@ public class Logger implements Closeable {
 		System.out.println(str);
 	}
 	
+	public void log(Exception e){
+		e.printStackTrace(logFile);
+	}
+	
 	
 	private Logger() {
 		// Initialization
