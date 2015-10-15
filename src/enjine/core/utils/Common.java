@@ -163,6 +163,16 @@ public class Common {
 	}
 	
 	/**
+	 * Concats the {@link Common#dataFolder} and given relative path.
+	 * @param relativePath
+	 * @return The absolute version of the given path.
+	 */
+	public static String makeAbsoluteDataPath(String relativePath){
+		return dataFolder + relativePath;
+	}
+	
+	
+	/**
 	 * Picks a pseudo-random color.
 	 * @param randomAlpha If false then alpha = 1 else alpha = rand();
 	 * @return The random color.
