@@ -6,10 +6,10 @@ public abstract class ParticleSystem {
 	protected HashSet<ParticleEmitter> emitters;
 	protected ParticleHolder holder;
 	
-	public ParticleSystem(int cap, ParticleHolder holder) {
+	public ParticleSystem(ParticleHolder holder) {
 		this.holder = holder;
-		emitters = new HashSet<ParticleEmitter>(cap + 1);
+		emitters = new HashSet<ParticleEmitter>();
 	}
 	
-	public abstract void render();
+	public abstract void loop();
 }

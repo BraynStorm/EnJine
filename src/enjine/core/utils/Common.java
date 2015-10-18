@@ -5,19 +5,28 @@ import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 
+import enjine.core.gl.Face;
 import enjine.core.gl.GLColor;
+import enjine.core.gl.Shader;
 import enjine.core.gl.TransformRectangle;
 import enjine.core.logging.Logger;
+import enjine.core.math.Vector2f;
+import enjine.core.math.Vector3f;
 import enjine.core.math.Vertex;
 
 public class Common {
@@ -26,6 +35,12 @@ public class Common {
 	public static final String dataFolder = gameFolder + "/data/";
 	/** gameFolder/logs/ */
 	public static final String logsFolder = gameFolder + "/logs/";
+	/**Regex that matches the filename and the extension in 2 separate groups (without the .).
+	 * group(1) = name; <br>
+	 * group(2) = ext; <br>
+	 * ex: "i.afe.geraef.aefag" + "png"
+	 */
+	public static final Pattern patternMatchFilename = Pattern.compile("(?:.*[\\/\\\\])?(.*)\\.(.*)", Pattern.CASE_INSENSITIVE);
 	
 	/**
 	 * Use this instead of makeing new {@link Random} objects.
@@ -117,7 +132,6 @@ public class Common {
 		return finalBuffer;
 	}
 	
-	
 	/**
 	 * Combines a {@link List<String>} to a single String separating every element with a new line (\n).
 	 * @param list The {@link List}
@@ -138,22 +152,22 @@ public class Common {
 	
 	/**
 	 * Reads all the lines in a single text file.
-	 * @param path Absolute path to the file.
+	 * @param absolutePath Absolute path to the file.
 	 * @return A string that contains all lines of the file.
 	 * @throws IOException {@link Files#readAllLines(java.nio.file.Path)}
 	 */
-	public static String readAllLinesToString(String path) throws IOException{
-		return combineStringList(Files.readAllLines(new File(path).toPath()));
+	public static String readAllLinesToString(String absolutePath) throws IOException{
+		return combineStringList(Files.readAllLines(new File(absolutePath).toPath()));
 	}
 	
 	/**
 	 * Reads all the lines in a single text file.
-	 * @param path Absolute path to the file.
+	 * @param absolutePath Absolute path to the file.
 	 * @return A string that contains all lines of the file.
 	 * @throws IOException {@link Files#readAllLines(java.nio.file.Path)}
 	 */
-	public static List<String> readAllLines(String path) throws IOException{
-		return Files.readAllLines(new File(path).toPath());
+	public static List<String> readAllLines(String absolutePath) throws IOException{
+		return Files.readAllLines(new File(absolutePath).toPath());
 	}
 	
 	/**
@@ -166,6 +180,90 @@ public class Common {
 		list.forEach(consumer);
 	}
 	
+	/**
+	 * Converts a {@link JSONArray} of {@link JSONArray}s to a {@link List} of {@link Vector3f} 
+	 * @param arr The 'master' JSONArray
+	 * @return The List
+	 */
+	public static List<Vector3f> jsonArrayToVector3fList(JSONArray arr){
+	    List<Vector3f> vectorList = new ArrayList<>(arr.length() + 1);
+	    
+	    for(int i = 0; i < arr.length(); i++){
+	        JSONArray innerArray = arr.getJSONArray(i);
+	        vectorList.add(jsonArrayToVector3f(innerArray));
+	    }
+	    
+	    return vectorList;
+	}
+	/**
+	 * Convertes a {@link JSONArray} to a {@link Vector3f}.
+	 * @param arr The JSONArray
+	 * @return The Vector3f
+	 */
+	public static Vector3f jsonArrayToVector3f(JSONArray arr){
+        if(arr.length() == 3){
+            float v1 = (float)arr.getDouble(0);
+            float v2 = (float)arr.getDouble(1);
+            float v3 = (float)arr.getDouble(2);
+            return new Vector3f(v1, v2, v3);
+        }else{
+            return new Vector3f(0,0,0);
+        }
+    }
+	
+	/**
+	 * Converts a {@link JSONArray} of {@link JSONArray} to a {@link List} of {@link Vector3f}.
+	 * @param arr The 'master' JSONArray.
+	 * @return The List.
+	 */
+	public static List<Vector2f> jsonArrayToVector2fList(JSONArray arr){
+	    List<Vector2f> vectorList = new ArrayList<>(arr.length() + 1);
+	    
+	    for(int i = 0; i < arr.length(); i++){
+	        JSONArray innerArray = arr.getJSONArray(i);
+	        vectorList.add(jsonArrayToVector2f(innerArray));
+	    }
+	    
+	    return vectorList;
+	}
+	/**
+	 * Converts a {@link JSONArray} to a {@link Vector2f}.
+	 * @param arr The JSONArray
+	 * @return The Vector2f
+	 */
+	public static Vector2f jsonArrayToVector2f(JSONArray arr){
+        if(arr.length() == 2){
+            float v1 = (float)arr.getDouble(0);
+            float v2 = (float)arr.getDouble(1);
+            return new Vector2f(v1, v2);
+        }else{
+            return new Vector2f(0,0);
+        }
+    }
+	
+	public static List<Face> jsonArrayToFaceList(JSONArray arr){
+        List<Face> faceList = new ArrayList<>(arr.length() + 1);
+        
+        for(int i = 0; i < arr.length(); i++){
+            JSONArray innerArray = arr.getJSONArray(i);
+            faceList.add(jsonArrayToFace(innerArray));
+        }
+        
+        return faceList;
+    }
+	public static Face jsonArrayToFace(JSONArray arr){
+        if(arr.length() == 3){
+            int i1 = arr.getInt(0);
+            int i2 = arr.getInt(1);
+            int i3 = arr.getInt(2);
+            return new Face(new int[] {i1, i2, i3});
+        }else{
+            Common.killProgram("JSONARRAY of faces has length different than 3.");
+            return null;
+        }
+    }
+
+	
 	/** {@link Common#killProgram(String)} with no msg part. */
 	public static void killProgram(){ killProgram(""); }
 	/** {@link Common#killProgram(Exception)} with a String rather than Exception. */
@@ -176,7 +274,7 @@ public class Common {
 	 */
 	public static void killProgram(Exception e){
 		Logger.getInstance().log(e);
-		System.exit(0);
+		System.exit(1);
 	}
 	
 	/** Renders a VBO/IBO/DrawCount pair on the screen. See {@link Common#renderBO(int, int, int, boolean)} for more information. */

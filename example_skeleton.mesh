@@ -1,6 +1,5 @@
 ﻿// Example VertexWeights description file.
 {
-	// Not sure about these 3.
 	"vertices" : [
 		[0,0,0],
 		[0,0,0],
@@ -18,11 +17,11 @@
 		[1,1],
 		[1,0],
 		[0,0]
-		//...
+		// ...
 	],
 	"faces" : [
-		{ "vertices" : [0,2,1], "texCoords" : [1,2,3], "normals" : [1,0,2]}, // Note: can be sequenced. Contains IDs, not coordinates!
-		{ "vertices" : [3,2,0], "texCoords" : [3,2,1], "normals" : [1,2,0]}
+		[3,2,0],
+		[3,1,0]
 		// ...
 	],
 	"bones" : [
@@ -51,7 +50,10 @@
 			// ...
 		]
 		// ...
-	]
+	],
+	"material" : {
+		
+	}
 }
 /* 
  * 

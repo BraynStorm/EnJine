@@ -1,0 +1,8 @@
+{
+	"smokePuff" : {
+		"type" : "animated",
+		"texture" : "smoke2",
+		"frameCount" : 40,
+		"affectedByGravity" : false,
+	}
+}

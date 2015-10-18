@@ -2,6 +2,8 @@
 
 uniform sampler2D diffuse;
 uniform vec3 particleColor;
+uniform int frameCount;
+uniform int currentFrame;
 
 in vec2 texCoord0;
 
@@ -13,8 +15,10 @@ vec4 blend(vec4 f, vec4 b){
 }
 
 void main(){
-	vec4 pixel = texture2D(diffuse, texCoord0);
+	float offset = float(currentFrame) / float(frameCount);
+	vec4 pixel = texture2D(diffuse, vec2((texCoord0.x / frameCount) + offset, texCoord0.y));
 	
+		
 	if(pixel.w == 0.0){
 		discard;
 	}else{

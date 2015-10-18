@@ -2,6 +2,7 @@ package enjine.core.gl;
 
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.lwjgl.BufferUtils;
 
@@ -25,9 +26,9 @@ public class Face {
 	 * @param faces The faces that describe the mesh/model
 	 * @return IntBuffer vertexIndices;
 	 */
-	public static IntBuffer meshify(ArrayList<Face> faces){
+	public static IntBuffer meshify(List<Face> faces){
 		
-		ArrayList<IntBuffer> buffers = new ArrayList<IntBuffer>();
+	    List<IntBuffer> buffers = new ArrayList<IntBuffer>();
 		
 		for(Face f : faces){
 			buffers.add(f.vertexIndices);
@@ -35,4 +36,8 @@ public class Face {
 		
 		return Common.combineBuffers(buffers, 3);
 	}
+	
+	public int[] getData(){
+        return vertexIndices.array();
+    }
 }

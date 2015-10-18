@@ -10,6 +10,8 @@ import enjine.core.gl.Rectangle;
 import enjine.core.gl.Shader;
 import enjine.core.gl.Texture;
 import enjine.core.gl.Window;
+import enjine.core.gl.particles.ParticleTransform;
+import enjine.core.gl.particles.tests.ParticleSystemCannon;
 import enjine.core.math.Time;
 import enjine.core.resources.ResourceManager;
 
@@ -55,6 +57,8 @@ public class Enjine {
 		particleShader = new Shader();
 		particleShader.loadShader("particle");
 		
+		particleShader.addUniform("frameCount");
+		particleShader.addUniform("currentFrame");
 		particleShader.addUniform("particleOriginTransform");
 		particleShader.addUniform("particleTransform");
 		particleShader.addUniform("particleColor");
@@ -62,8 +66,10 @@ public class Enjine {
 		particleShader.addUniform("camera_translation");
 		particleShader.addUniform("projection_matrix");
 		
+		
 		/* General Stuff */
-		ResourceManager.getInstance();
+		
+		ResourceManager.initializeParticles();
 		
 		/* Shapes */
 		Rectangle.initialize();
@@ -93,8 +99,19 @@ public class Enjine {
 		Texture.unbind();
 		
 		camera = new Camera();
-		LightDirectional sun = LightDirectional.getSun();
 		
+		/**
+		 * Tesing Stuff
+		 */
+		LightDirectional sun = LightDirectional.getSun();
+		ParticleTransform cannonTransfrom = new ParticleTransform();
+		cannonTransfrom.setTranslationZ(2);
+		//cannonTransfrom.setScale(0.1f);
+		ParticleSystemCannon cannon = new ParticleSystemCannon(cannonTransfrom, ResourceManager.getAnimatedParticle("smokePuff"));
+		
+		/*
+		 * End of Testing Stuff
+		 */
 		timer.loop();
 		while(!Window.shouldClose() && running){
 			
@@ -114,9 +131,11 @@ public class Enjine {
 			
 			particleShader.bind();
 			particleShader.setUniform("projection_matrix", Window.getProjectionMatrix());
+			particleShader.setUniformi("currentFrame", 0);
+			particleShader.setUniformi("frameCount", 1);
 			camera.setTranslationMatrix();
 			camera.setRotationMatrix();
-			
+			cannon.loop();
 			
 			guiShader.bind();
 			

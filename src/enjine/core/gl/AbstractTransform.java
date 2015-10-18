@@ -38,7 +38,6 @@ public abstract class AbstractTransform {
 		int result = 1;
 		result = prime * result + ((rotation == null) ? 0 : rotation.hashCode());
 		result = prime * result + ((scale == null) ? 0 : scale.hashCode());
-		result = prime * result + ((transformation == null) ? 0 : transformation.hashCode());
 		result = prime * result + ((translation == null) ? 0 : translation.hashCode());
 		return result;
 	}
@@ -51,6 +50,7 @@ public abstract class AbstractTransform {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
+		
 		AbstractTransform other = (AbstractTransform) obj;
 		if (rotation == null) {
 			if (other.rotation != null)
@@ -89,13 +89,13 @@ public abstract class AbstractTransform {
 	
 	/**
 	 * Don't use as a 'setter'. Use the setter.
-	 * @return the rotation vector
+	 * @return the translation vector
 	 */
 	public Vector3f getTranslation() { return translation; }
 	
 	/**
 	 * Don't modify.
-	 * @return the rotation vector
+	 * @return the scale vector
 	 */
 	public Matrix4f getTransformation(){ return transformation; }
 }

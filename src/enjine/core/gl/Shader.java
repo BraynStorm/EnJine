@@ -66,8 +66,6 @@ public class Shader {
 			
 			s.close();
 			
-			//System.out.println("Shader : " + shaderCode);
-			
 			if(!glIsShader(shader)){
 				shader = glCreateShader(type);
 			}
@@ -82,13 +80,7 @@ public class Shader {
 				glBindAttribLocation(programID, 2, "normal");
 				
 				glAttachShader(programID, shader);
-				
-				// DEBUG:
-				// System.out.println(glIsProgram(programID));
-
 			}
-			
-			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -142,9 +134,8 @@ public class Shader {
 		}else{
 			glGetShaderiv(handler, flag, sucBuf);
 		}
+		
 		success = sucBuf.get();
-		
-		
 		if(success == GL_FALSE){
 			if(isProgram){
 				System.out.println(message + glGetProgramInfoLog(handler));

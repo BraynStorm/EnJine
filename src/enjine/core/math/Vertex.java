@@ -2,6 +2,7 @@ package enjine.core.math;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.lwjgl.BufferUtils;
 
@@ -100,7 +101,7 @@ public class Vertex {
 		}
 	}
 	
-	public static FloatBuffer bufferfy(ArrayList<Vertex> vertices){
+	public static FloatBuffer bufferfy(List<Vertex> vertices){
 		
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(vertices.size() * SIZE);
 		

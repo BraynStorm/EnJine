@@ -29,9 +29,9 @@ public class GUIButton {
 		EventManager.register(this);
 		shape = new Rectangle();
 		
-		normal = ResourceManager.getInstance().getTexture(textureID);
-		clicked = ResourceManager.getInstance().getTexture(textureID+1);
-		hovered = ResourceManager.getInstance().getTexture(textureID+2);
+		normal = ResourceManager.getTexture(textureID);
+		clicked = ResourceManager.getTexture(textureID+1);
+		hovered = ResourceManager.getTexture(textureID+2);
 	}
 	
 	@Subscribe

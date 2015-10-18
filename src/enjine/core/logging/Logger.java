@@ -27,13 +27,14 @@ public class Logger implements Closeable {
 	
 	public void log(Exception e){
 		e.printStackTrace(logFile);
+		e.printStackTrace();
 	}
 	
 	
 	private Logger() {
 		// Initialization
 		try{
-			logFile = new PrintWriter(new FileOutputStream(Common.logsFolder + "logs/latest.log"));
+			logFile = new PrintWriter(new FileOutputStream(Common.logsFolder + "latest.log"));
 		}catch(IOException e){
 			e.printStackTrace();
 			System.exit(0);

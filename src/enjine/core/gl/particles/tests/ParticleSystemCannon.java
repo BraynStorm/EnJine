@@ -1,45 +1,41 @@
 package enjine.core.gl.particles.tests;
 
 import enjine.core.Enjine;
+import enjine.core.gl.particles.AnimatedParticle;
 import enjine.core.gl.particles.ParticleSystem;
 import enjine.core.gl.particles.ParticleTransform;
+import enjine.core.gl.particles.PhysicsParticle;
 import enjine.core.math.Vector3f;
 
 public class ParticleSystemCannon extends ParticleSystem{
 	
 	double passedTime = 0;
 	
-	public ParticleSystemCannon(ParticleTransform transform) {
-		super(1, new ParticleHolderCannon(transform));
-		
+	protected PhysicsParticle template;
+	
+	public ParticleSystemCannon(ParticleTransform transform, AnimatedParticle template) {
+		super(new ParticleHolderCannon(transform));
+		this.template = new AnimatedParticle(template);
 		emitters.add(
 				new ParticleEmitterCannon(
 						holder,
 						transform,
-						new Vector3f(1,1,0)
+						template,
+						new Vector3f(0.001f,0.02f,0)
 						)
 				);
-		
-		/*emitters.add(
-				new ParticleEmitterCannon(
-						holder,
-						transform,
-						new Vector3f(-1,1,0)
-						)
-				);*/
 		
 	}
 	
 	@Override
-	public void render(){
+	public void loop(){
 		passedTime += Enjine.timer.getDeltaSeconds();
 		
-		if(passedTime >= 1d){
+		if(passedTime >= 01d){
 			emitters.forEach(e ->{
 				e.emit();
 			});
 			
-			System.out.println("Spawning");
 			passedTime = 0;
 		}
 		

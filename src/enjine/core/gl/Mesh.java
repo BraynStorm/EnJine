@@ -1,6 +1,6 @@
 package enjine.core.gl;
 import java.nio.IntBuffer;
-import java.util.ArrayList;
+import java.util.List;
 
 import org.lwjgl.opengl.GL15;
 
@@ -41,7 +41,7 @@ public class Mesh {
 		Common.renderBO(vbo, ibo, drawCount, true);
 	}
 	
-	public Mesh(ArrayList<Vertex> vertices, ArrayList<Face> faces, Material material){
+	public Mesh(List<Vertex> vertices, List<Face> faces, Material material){
 		this.material = material;
 		
 		IntBuffer indexData = Face.meshify(faces);

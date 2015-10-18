@@ -1,6 +1,7 @@
 package enjine.core.gl.particles;
 
 import java.util.HashSet;
+import java.util.Iterator;
 
 import enjine.core.gl.MeshTransform;
 import enjine.core.gl.Shader;
@@ -8,15 +9,15 @@ import enjine.core.gl.Transformable;
 
 public abstract class ParticleHolder implements Transformable {
 	protected int particleCap;
-	protected MeshTransform transform;
+	protected ParticleTransform transform;
 	protected HashSet<Particle> particleSet;
 	
 	
 	/**
-	 * Default {@link ParticleHolder#particleCap} is 10 000.
+	 * Default {@link ParticleHolder#particleCap} is 100.
 	 */
 	public ParticleHolder(ParticleTransform transform){
-		this(10000, transform);
+		this(100, transform);
 	}
 	
 	
@@ -28,13 +29,18 @@ public abstract class ParticleHolder implements Transformable {
 	}
 	
 	public void renderParticles(){
-		particleSet.removeIf(p -> shouldDespawnParticle(p));
 		
 		Shader.currentlyBound.setUniform("particleOriginTransform", transform.getTransformation());
-		
-		particleSet.forEach(p -> {
-			p.render();
-		});
+		//System.out.println(particleSet.size());
+		Iterator<Particle> it = particleSet.iterator();
+		while(it.hasNext()){
+		    Particle p = it.next();
+		    
+		    if(shouldDespawnParticle(p))
+		        particleSet.remove(p);
+		    
+		    p.render();
+		}
 	}
 	
 	public abstract boolean shouldDespawnParticle(Particle p);
@@ -88,6 +94,6 @@ public abstract class ParticleHolder implements Transformable {
 	}
 
 
-	@Override public MeshTransform getTransform() {return transform;}
-	@Override public void transformationOccured() {}
+	@Override public MeshTransform getTransform(){ return transform; }
+	@Override public void transformationOccured(){}
 }

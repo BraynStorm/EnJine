@@ -1,6 +1,5 @@
 package enjine.core.gl.particles;
 
-import enjine.core.gl.MeshTransform;
 import enjine.core.gl.Origin;
 import enjine.core.gl.Rectangle;
 import enjine.core.gl.Shader;
@@ -14,6 +13,7 @@ public class Particle implements Transformable {
 	
 	public Particle(Texture texture){
 		this.texture = texture;
+		transform = new ParticleTransform();
 	}
 	
 	public Particle(Texture texture, ParticleTransform transform){
@@ -25,12 +25,20 @@ public class Particle implements Transformable {
 		Texture.bind(texture);
 		Shader.currentlyBound.setUniform("particleTransform", transform.getTransformation());
 		Common.renderBO(Rectangle.getVBO(Origin.CENTER), Rectangle.getIBO(), Rectangle.getDrawCount());
+		
+		Shader.currentlyBound.setUniformi("currentFrame", 0);
+		Shader.currentlyBound.setUniformi("frameCount", 1);
 	}
 	
 	@Override
-	public MeshTransform getTransform() {
+	public ParticleTransform getTransform() {
 		return transform;
 	}
+	
+	public Particle(Particle p) {
+        texture = p.texture;
+        transform = new ParticleTransform(p.transform);
+    }
 	
 	@Override
 	public void transformationOccured() {}
@@ -48,21 +56,29 @@ public class Particle implements Transformable {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
+		
 		if (obj == null)
 			return false;
+		
 		if (getClass() != obj.getClass())
-			return false;
+		    return false;
+		
 		Particle other = (Particle) obj;
+		
 		if (texture == null) {
 			if (other.texture != null)
 				return false;
+			
 		} else if (!texture.equals(other.texture))
 			return false;
+		
 		if (transform == null) {
 			if (other.transform != null)
 				return false;
+			
 		} else if (!transform.equals(other.transform))
 			return false;
+		
 		return true;
 	}
 	

@@ -1,0 +1,29 @@
+﻿{
+	"ns" : 96.078431,
+	"ka" : [0,0,0],
+	"kd" : [0.64, 0.64, 0.64,],
+	// ...
+}
+/*
+# Blender MTL File: 'None'
+# Material Count: 2
+
+newmtl Cone
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl Cube
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.685430 0.685430 0.685430
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd E:\\Development\\Workspace-New\\Enjine\\bin\\data\\textures\\10.png
+*/

@@ -10,7 +10,7 @@ public class FullBlownModel {
 	
 	public void render(){
 		meshes.forEach(m -> m.render());
-		particleSystems.forEach(m -> m.render());
+		particleSystems.forEach(m -> m.loop());
 	}
 	
 }

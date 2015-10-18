@@ -12,9 +12,9 @@ import static org.lwjgl.opengl.GL13.*;
 public class Texture {
 
 	public int textureID;
+	public String path;
 	
 	Format format;
-	
 	int width;
 	int height;
 	
@@ -35,6 +35,26 @@ public class Texture {
 		glBindTexture(GL11.GL_TEXTURE_2D, textureID);
 	}
 	
+	/**
+     * Binds the texture and sets its Wrap S/T values to the given one.
+     * @param val
+     */
+	public void setWrap(int val){
+	    bind();
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, val);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, val);
+    }
+	
+	/**
+	 * Binds the texture and sets its Filter Min/Mag values to the given one.
+	 * @param val
+	 */
+	public void setFilter(int val){
+	    bind();
+	    GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, val);
+        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, val);
+    }
+	
 	public static void bind(Texture t){
 		if(t == null)
 			Texture.unbind();
@@ -44,7 +64,7 @@ public class Texture {
 	
 	public static void unbind() {
 		if(defaultTexture == null)
-			defaultTexture = ResourceManager.getInstance().getTexture(0);
+			defaultTexture = ResourceManager.getTexture("default");
 		defaultTexture.bind();
 	}
 
