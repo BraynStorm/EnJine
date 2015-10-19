@@ -6,12 +6,13 @@ import org.lwjgl.opengl.GL20;
 import enjine.core.gl.Camera;
 import enjine.core.gl.FPSManager;
 import enjine.core.gl.LightDirectional;
+import enjine.core.gl.Mesh;
+import enjine.core.gl.MeshTransform;
 import enjine.core.gl.Rectangle;
 import enjine.core.gl.Shader;
 import enjine.core.gl.Texture;
 import enjine.core.gl.Window;
-import enjine.core.gl.particles.ParticleTransform;
-import enjine.core.gl.particles.tests.ParticleSystemCannon;
+import enjine.core.gl.particles.RealParticle;
 import enjine.core.math.Time;
 import enjine.core.resources.ResourceManager;
 
@@ -104,10 +105,15 @@ public class Enjine {
 		 * Tesing Stuff
 		 */
 		LightDirectional sun = LightDirectional.getSun();
-		ParticleTransform cannonTransfrom = new ParticleTransform();
+		MeshTransform cannonTransfrom = new MeshTransform();
 		cannonTransfrom.setTranslationZ(2);
 		//cannonTransfrom.setScale(0.1f);
-		ParticleSystemCannon cannon = new ParticleSystemCannon(cannonTransfrom, ResourceManager.getAnimatedParticle("smokePuff"));
+		//ParticleSystemCannon cannon = new ParticleSystemCannon(cannonTransfrom, ResourceManager.getAnimatedParticle("smokePuff"));
+		
+		Mesh naDakataChoveka = ResourceManager.getMesh("cannon");
+		MeshTransform chovekaTransform = new MeshTransform();
+		chovekaTransform.setTranslationZ(3.1f).setScale(0.1f);
+		RealParticle smoke = ResourceManager.getAnimatedParticle("smokePuff");
 		
 		/*
 		 * End of Testing Stuff
@@ -128,6 +134,7 @@ public class Enjine {
 			worldShader.setUniform("projection_matrix", Window.getProjectionMatrix());
 			sun.use();
 			camera.loop();
+			naDakataChoveka.render(chovekaTransform);
 			
 			particleShader.bind();
 			particleShader.setUniform("projection_matrix", Window.getProjectionMatrix());
@@ -135,7 +142,8 @@ public class Enjine {
 			particleShader.setUniformi("frameCount", 1);
 			camera.setTranslationMatrix();
 			camera.setRotationMatrix();
-			cannon.loop();
+			//cannon.loop();
+			smoke.render();
 			
 			guiShader.bind();
 			

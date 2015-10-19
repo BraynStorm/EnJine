@@ -170,27 +170,27 @@ public class Camera {
 	}
 
 	public void move(Vector3f dir, float amount){
-		pos = pos.add(dir.mul(amount));
+		pos = pos.getAdd(dir.getMul(amount));
 		recalcTranslationMatrix();
 	}
 	
 	public void moveForward(float amount){
-		pos = pos.add(forward.mul(amount));
+		pos = pos.getAdd(forward.getMul(amount));
 		recalcTranslationMatrix();
 	}
 	
 	public void moveBackward(float amount){
-		pos = pos.add(forward.getInverted().mul(amount));
+		pos = pos.getAdd(forward.getInverted().getMul(amount));
 		recalcTranslationMatrix();
 	}
 	
 	public void moveLeft(float amount){
-		pos = pos.add(getRight().mul(amount));
+		pos = pos.getAdd(getRight().getMul(amount));
 		recalcTranslationMatrix();
 	}
 	
 	public void moveRight(float amount){
-		pos = pos.add(getLeft().mul(amount));
+		pos = pos.getAdd(getLeft().getMul(amount));
 		recalcTranslationMatrix();
 	}
 	

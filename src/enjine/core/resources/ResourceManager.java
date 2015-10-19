@@ -3,9 +3,11 @@ package enjine.core.resources;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -26,8 +28,7 @@ import enjine.core.gl.FullBlownModel;
 import enjine.core.gl.Material;
 import enjine.core.gl.Mesh;
 import enjine.core.gl.Texture;
-import enjine.core.gl.particles.AnimatedParticle;
-import enjine.core.gl.particles.PhysicsParticle;
+import enjine.core.gl.particles.RealParticle;
 import enjine.core.logging.Logger;
 import enjine.core.logging.Logger.LogLevel;
 import enjine.core.math.Vector2f;
@@ -53,8 +54,7 @@ public class ResourceManager {
     private static HashMap<String, FullBlownModel> modelMap = new HashMap<>();
     
     /** Contains all particles that Enjine uses */
-    private static HashMap<String, PhysicsParticle> physicsParticlesMap = new HashMap<>(); 
-    private static HashMap<String, AnimatedParticle> animatedParticlesMap = new HashMap<>(); 
+    private static HashMap<String, RealParticle> particlesMap = new HashMap<>();
     
     /**
      * int verison of {@link ResourceManager#getTexture(String)}.
@@ -108,14 +108,14 @@ public class ResourceManager {
         return mesh;
     }
     
-    public static AnimatedParticle getAnimatedParticle(String name){
-        AnimatedParticle particle = animatedParticlesMap.get(name);
+    public static RealParticle getAnimatedParticle(String name){
+        RealParticle particle = particlesMap.get(name);
         
         if(particle == null){
             System.out.println("WTF");
         }
         
-        return particle;
+        return new RealParticle(particle);
     }
     /**
      * Loades a new .obj file and converts it to a Map.
@@ -172,22 +172,24 @@ public class ResourceManager {
             
             if(mtl != null)
                 materialObject = mtl.getJSON();
-            else
-                materialObject = new JSONObject();
+            else{
+                materialObject = new JSONObject(); System.out.println("else");}
             
-            meshObject.append(name, materialObject);
+            meshObject.put("material", materialObject);
             meshes.put(name, meshObject);
         });
         
+        
+        
+        
         meshes.forEach((k,v) -> {
             try {
-                PrintWriter writer = new PrintWriter(Common.makeAbsoluteDataPath("meshes/" + k + ".mesh"));
-                
+                FileWriter writer = new FileWriter(Common.makeAbsoluteDataPath("meshes/" + k + ".mesh"), false);
                 writer.write(v.toString());
                 writer.write('\n');
                 
                 writer.close();
-            } catch (FileNotFoundException e) {
+            } catch (IOException e) {
                 Logger.getInstance().log(e);
             }
         });
@@ -225,6 +227,8 @@ public class ResourceManager {
         if (relMeshPath.endsWith(".obj")){
             mergeObjAndMtlIntoMesh(relMeshPath);
         }
+        
+        relMeshPath = relMeshPath.replace(".obj", ".mesh");
         
         Mesh mesh = null;
         String lines = "{}";
@@ -272,6 +276,8 @@ public class ResourceManager {
             Logger.getInstance().log(Logger.LogLevel.WARNING, "Trying to load an invalid mesh file. Skipping");
         else{
             Matcher m = Common.patternMatchFilename.matcher(relMeshPath);
+            m.find();
+            System.out.println(relMeshPath +'\n');
             registerMesh(m.group(1), mesh);
         }
         
@@ -296,21 +302,12 @@ public class ResourceManager {
         JSONObject allParticles = new JSONObject(fileData);
         
         allParticles.keySet().forEach(k -> {
-            String type = "generic";
             JSONObject particleObj = allParticles.getJSONObject(k);
             
-            if(particleObj.has("type"))
-                type = particleObj.getString("type");
-            switch(type){
-                case "generic":
-                    
-                    break;
-                case "animated":
-                    AnimatedParticle animParticle = new AnimatedParticle(getTexture(particleObj.getString("texture")), particleObj.getInt("frameCount"));
-                    animParticle.setIsAffectedByGravity(particleObj.getBoolean("affectedByGravity"));
-                    animatedParticlesMap.put(k, animParticle);
-                    break;
-            }
+            RealParticle p = new RealParticle(getTexture(particleObj.getString("texture")), particleObj.getInt("frameCount"), particleObj.getBoolean("continuous"));
+            p.setPhysicsProps(particleObj.getInt("physicProps"));
+            p.setPhysicsData(particleObj.getJSONObject("physicsData"));
+            particlesMap.put(k, p);
             
         });
         
@@ -613,31 +610,42 @@ public class ResourceManager {
             FloatBuffer vBuffer = Vertex.bufferfy(vertices);
             
             while (vBuffer.hasRemaining()) {
-                positionArray.put(vBuffer.get());
-                positionArray.put(vBuffer.get());
-                positionArray.put(vBuffer.get());
+                JSONArray arr1 = new JSONArray();
+                arr1.put(vBuffer.get());
+                arr1.put(vBuffer.get());
+                arr1.put(vBuffer.get());
+                positionArray.put(arr1);
                 
-                texCoordArray.put(vBuffer.get());
-                texCoordArray.put(vBuffer.get());
+                arr1 = new JSONArray();
+                arr1.put(vBuffer.get());
+                arr1.put(vBuffer.get());
+                texCoordArray.put(arr1);
                 
-                normalArray.put(vBuffer.get());
-                normalArray.put(vBuffer.get());
-                normalArray.put(vBuffer.get());
+                arr1 = new JSONArray();
+                arr1.put(vBuffer.get());
+                arr1.put(vBuffer.get());
+                arr1.put(vBuffer.get());
+                normalArray.put(arr1);
             }
             
             IntBuffer faceBuffer = Face.meshify(faces);
             
-            while (faceBuffer.hasRemaining())
-                faceArray.put(faceBuffer.get());
+            while (faceBuffer.hasRemaining()){
+                JSONArray arr = new JSONArray();
+                arr.put(faceBuffer.get());
+                arr.put(faceBuffer.get());
+                arr.put(faceBuffer.get());
+                faceArray.put(arr);
+            }
                 
             masterObj.put("positions", positionArray);
             masterObj.put("texCoords", texCoordArray);
             masterObj.put("normals", normalArray);
             masterObj.put("faces", faceArray);
             
-            masterObj.append("bones", new JSONArray());
-            masterObj.append("weights", new JSONArray());
-            masterObj.append("poses", new JSONArray());
+            masterObj.put("bones", new JSONArray());
+            masterObj.put("weights", new JSONArray());
+            masterObj.put("poses", new JSONArray());
             
             return masterObj;
         }

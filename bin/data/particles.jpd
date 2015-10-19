@@ -1,8 +1,11 @@
 {
 	"smokePuff" : {
-		"type" : "animated",
 		"texture" : "smoke2",
 		"frameCount" : 40,
-		"affectedByGravity" : false,
+		"continuous" : false,
+		"physicProps" : 6,
+		"physicsData" : {
+			"density" : 1.23
+		}
 	}
 }

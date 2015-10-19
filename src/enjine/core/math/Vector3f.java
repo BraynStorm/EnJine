@@ -10,11 +10,18 @@ public class Vector3f {
 	public float x,y,z;
 	
 	public Vector3f(float x, float y, float z) {
-		super();
-		this.x = x;
-		this.y = y;
-		this.z = z;
-	}
+        super();
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+	
+	public Vector3f(float f) {
+        super();
+        this.x = f;
+        this.y = f;
+        this.z = f;
+    }
 	
 	@Override
 	public String toString() {
@@ -64,9 +71,9 @@ public class Vector3f {
 		Vector3f v = new Vector3f(this);
 		angle = (float) Math.toRadians(angle);
 		
-		v.mul( (float) Math.cos(angle));
-		v.add( n.mul(this.dot(n)).mul(1-(float) Math.cos(angle)) );
-		v.add(n.cross(this).mul((float)Math.sin(angle)));
+		v.getMul( (float) Math.cos(angle));
+		v.getAdd( n.getMul(this.dot(n)).getMul(1-(float) Math.cos(angle)) );
+		v.getAdd(n.cross(this).getMul((float)Math.sin(angle)));
 		
 		x = v.x;
 		y = v.y;
@@ -112,37 +119,95 @@ public class Vector3f {
 		return new Vector3f(x_, y_, z_);
 	}
 	
-	public Vector3f add(Vector3f v){
-		return new Vector3f(v.x + x, v.y + y, v.z + z);
-	}
+	public Vector3f getAdd(Vector3f v){
+        return new Vector3f(v.x + x, v.y + y, v.z + z);
+    }
+    
+    public Vector3f getAdd(float v){
+        return new Vector3f(v + x, v + y, v + z);
+    }
+    
+    public Vector3f add(Vector3f v){
+        x += v.x;
+        y += v.y;
+        z += v.z;
+        return this;
+    }
+    
+    public Vector3f add(float v){
+        x += x;
+        y += y;
+        z += z;
+        return this;
+    }
 	
-	public Vector3f add(float v){
-		return new Vector3f(v + x, v + y, v + z);
-	}
+    public Vector3f getSub(Vector3f v){
+        return new Vector3f(v.x - x, v.y - y, v.z - z);
+    }
+    
+    public Vector3f getSub(float v){
+        return new Vector3f(v - x, v - y, v - z);
+    }
+    
+    public Vector3f sub(Vector3f v){
+        x -= v.x;
+        y -= v.y;
+        z -= v.z;
+        return this;
+    }
+    
+    public Vector3f sub(float v){
+        x -= x;
+        y -= y;
+        z -= z;
+        return this;
+    }
 	
-	public Vector3f sub(Vector3f v){
-		return new Vector3f(v.x - x, v.y - y, v.z - z);
-	}
+	public Vector3f getMul(Vector3f v){
+        return new Vector3f(v.x * x, v.y * y, v.z * z);
+    }
+    
+    public Vector3f getMul(float v){
+        return new Vector3f(v * x, v * y, v * z);
+    }
+    
+    public Vector3f mul(Vector3f v){
+        x *= v.x;
+        y *= v.y;
+        z *= v.z;
+        return this;
+    }
+    
+    public Vector3f mul(float v){
+        x *= v;
+        y *= v;
+        z *= v;
+        return this;
+    }
+    
+    
 	
-	public Vector3f sub(float v){
-		return new Vector3f(v - x, v - y, v - z);
-	}
-	
-	public Vector3f mul(Vector3f v){
-		return new Vector3f(v.x * x, v.y * y, v.z * z);
-	}
-	
-	public Vector3f mul(float v){
-		return new Vector3f(v * x, v * y, v * z);
-	}
-	
-	public Vector3f div(Vector3f v){
-		return new Vector3f(v.x / x, v.y / y, v.z / z);
-	}
-	
-	public Vector3f div(float v){
-		return new Vector3f(v / x, v / y, v / z);
-	}
+    public Vector3f getDiv(Vector3f v){
+        return new Vector3f(v.x / x, v.y / y, v.z / z);
+    }
+    
+    public Vector3f getDiv(float v){
+        return new Vector3f(v / x, v / y, v / z);
+    }
+    
+    public Vector3f div(Vector3f v){
+        x /= v.x;
+        y /= v.y;
+        z /= v.z;
+        return this;
+    }
+    
+    public Vector3f div(float v){
+        x /= v;
+        y /= v;
+        z /= v;
+        return this;
+    }
 
 	@Override
 	public int hashCode() {

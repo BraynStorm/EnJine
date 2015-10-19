@@ -39,5 +39,5 @@ public class MeshTransform extends AbstractTransform {
 	public MeshTransform setScale(Vector3f s){ scale = new Vector3f(s); recalculateMatrix(); return this; }
 	public MeshTransform setScale(float s) { scale = new Vector3f(s,s,s); recalculateMatrix(); return this; }
 	
-	
+	public MeshTransform translateBy(Vector3f t) { translation.add(t); recalculateMatrix(); return this; }
 }
