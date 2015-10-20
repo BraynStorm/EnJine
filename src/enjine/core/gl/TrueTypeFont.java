@@ -11,12 +11,14 @@ import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.system.windows.RECT;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 
 import de.matthiasmann.twl.utils.PNGDecoder.Format;
+import enjine.core.utils.Common;
 
 public class TrueTypeFont {
 	
@@ -263,12 +265,13 @@ public class TrueTypeFont {
 	 * 
 	 * @param transform The transformation matrix (zRotOnly?) that applies to that whole text
 	 * @param whatchars the string to render
-	 * @param color a Vector4f (RGBA). Black if null
+	 * @param color a Vector4f (RGBA).
 	 */
 	public void drawString(TransformTTF transform, String whatchars, GLColor color) {
 		fontTexture.bind();
 		
 		transform.moved = 0;
+		
 		for (int i = 0; i < whatchars.length(); i++) {
 			int charCurrent = whatchars.charAt(i);
 			
@@ -281,10 +284,14 @@ public class TrueTypeFont {
 			IntObject intObject = charArray[charCurrent];
 			
 			if( intObject != null ) {
+			    transform.setWidth(intObject.width);
+				transform.setHeight(intObject.height);
+				
 				Shader.currentlyBound.setUniform("transform", transform.getTransformation());
 				Shader.currentlyBound.setUniform("color", color);
-				drawQuad(charCurrent);
-				transform.addMovement(intObject.realW);
+				//drawQuad(charCurrent);
+				Common.renderBO(Rectangle.getVBO(Origin.TOPLEFT), Rectangle.getIBO(), Rectangle.getDrawCount());
+				transform.moved += intObject.width;
 			}
 		}
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

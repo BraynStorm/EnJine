@@ -30,10 +30,10 @@ public class TransformRectangle extends AbstractTransform {
 	private int yPosition = 0;
 	
 	
+	
 	public TransformRectangle() {
 		super();
 		EventManager.register(this);
-		recalculateTranslation();
 	}
 	
 	/**
@@ -47,8 +47,6 @@ public class TransformRectangle extends AbstractTransform {
 		yPosition = transform.yPosition;
 		
 		EventManager.register(this);
-		
-		recalculateMatrix();
 	}
 	
 	/**
@@ -74,7 +72,7 @@ public class TransformRectangle extends AbstractTransform {
 	 */
 	@Subscribe
 	public void windowResized(WindowSizeEvent event){
-		recalculateMatrix();
+	    markDirty();
 	}
 	
 	/**
@@ -85,22 +83,26 @@ public class TransformRectangle extends AbstractTransform {
 		translation.y = (-2 * (float)yPosition / (float) Window.getHeight()) + 1f;
 	}
 
+	public void setDrawLevel(DrawLevel dl) {
+        translation.z = dl.getZValue();
+    }
+	
 	public TransformRectangle setWidth(int w){
 		width = w;
-		recalculateMatrix();
+		markDirty();
 		return this;
 	}
 	
 	public TransformRectangle setHeight(int h){
 		height = h;
-		recalculateMatrix();
+		markDirty();
 		return this;
 	}
 	
 	public TransformRectangle translateBy(int x, int y){
 		xPosition += x;
 		yPosition += y;
-		recalculateMatrix();
+		markDirty();
 		return this;
 	}
 	
@@ -108,32 +110,46 @@ public class TransformRectangle extends AbstractTransform {
 		this.scale.x = scale;
 		this.scale.y = scale;
 		this.scale.z = scale;
-		recalculateMatrix();
+		markDirty();
 		return this;
 	}
 	
 	public TransformRectangle setScale(Vector3f scale){
 		this.scale = new Vector3f(scale);
-		recalculateMatrix();
+		markDirty();
 		return this;
 	}
 	
 	public TransformRectangle setTranslationX(int x) {
 		xPosition = x;
-		recalculateMatrix();
+		markDirty();
 		return this;
 	}
 	
 	public TransformRectangle setTranslationY(int y) {
 		yPosition = y;
-		recalculateMatrix();
+		markDirty();
 		return this;
 	}
 
+	public TransformRectangle setRotation(float deg){
+	    rotation.z = deg;
+	    markDirty();
+	    return this;
+	}
+	
+	public TransformRectangle rotateBy(float deg){
+	    rotation.z += deg;
+	    markDirty();
+	    return this;
+	}
+	
 	public int getWidth(){return width;}
 	public int getHeight(){return height;}
 
 	public int getXPosition(){return xPosition;}
 	public int getYPosition(){return yPosition;}
+
+    
 	
 }

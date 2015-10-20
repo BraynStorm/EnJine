@@ -46,7 +46,7 @@ public class Physics {
      */
     public void update(){
         float deltaTime = (float) Enjine.timer.getDeltaSeconds();
-        float randomFactor = 0.001f;
+        float randomFactor = 0.0005f;
         
         if(getProp(AFFECTED_BY_GRAVITY))
             velocity.add(GRAVITY_VECTOR.getMul(deltaTime));
@@ -60,7 +60,7 @@ public class Physics {
         transfrom.translateBy(velocity);
         
 
-        System.out.println(velocity);
+        //System.out.println(String.format("X: %.4f, Y: %.4f, Z: %.4f,", velocity.x, velocity.y, velocity.z));
     }
     
     
@@ -76,8 +76,8 @@ public class Physics {
         setVelocity(direction.getMul(speed));
     }
     
-    public void setTransfrom(MeshTransform transfrom) {
-        this.transfrom = transfrom;
+    public void setTransfrom(MeshTransform transform) {
+        this.transfrom = new MeshTransform(transform);
     }
     
     public Matrix4f getTransfromationMatrix() {

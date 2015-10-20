@@ -33,7 +33,7 @@ public class LightDirectional{
 	}
 	
 	public void use(){
-	//	Shader.currentlyBound.setUniform("sunlight_color", color);
+		//Shader.currentlyBound.setUniform("sunlight_color", color);
 		Shader.currentlyBound.setUniform("sunlight_direction", new Vector3f(-1, (float)Math.cos(angle), (float)Math.sin(angle))); // TODO: Remove this, make the sun act like a real sun
 		
 	}

@@ -30,7 +30,7 @@ public class Mesh {
 	
 	public void render(MeshTransform transform, boolean pickingMode){
 		
-		Shader.currentlyBound.setUniform("transform", transform.getTransformation());
+		Shader.currentlyBound.setUniform("transformMatrix", transform.getTransformation());
 		
 		if(pickingMode)
 			Shader.currentlyBound.setUniform("color", pickingColor);

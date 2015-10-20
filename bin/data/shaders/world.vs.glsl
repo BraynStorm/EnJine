@@ -4,12 +4,10 @@ layout (location = 0) in vec3 position;
 layout (location = 1) in vec2 texCoord;
 layout (location = 2) in vec3 normal;
 
-uniform mat4 transform;
-
-uniform mat4 camera_translation;
-uniform mat4 camera_rotation;
-
-uniform mat4 projection_matrix;
+uniform mat4 transformMatrix;
+uniform mat4 viewMatrixT; // A.K.A Camera
+uniform mat4 viewMatrixR; // A.K.A Camera
+uniform mat4 projectionMatrix;
 
 out vec2 texCoord0;
 out vec3 normal0;
@@ -21,11 +19,11 @@ void main(){
   vec4 pos = vec4(position, 1);
   
   // Unsure....
-  //transpose(inverse(transform)) * 
-  //normal0 = (transpose(inverse(transform)) * vec4(position, 0)).xyz;
-  normal0 = (transpose(inverse(transform)) * vec4(normal, 0)).xyz;
+  //transpose(inverse(transformMatrix)) * 
+  //normal0 = (transpose(inverse(transformMatrix)) * vec4(position, 0)).xyz;
+  normal0 = (transpose(inverse(transformMatrix)) * vec4(normal, 0)).xyz;
   
   
-  gl_Position = projection_matrix * camera_rotation * camera_translation * transform * pos;
-  
+  gl_Position = projectionMatrix * viewMatrixR * viewMatrixT * transformMatrix * pos;
+  //gl_Position = vec4(position, 1);
 }

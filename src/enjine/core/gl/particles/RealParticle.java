@@ -17,20 +17,23 @@ public class RealParticle {
     protected Texture texture;
     protected TextureAnimation animation;
     
+    protected Matrix4f originMatrix;
+    
     public RealParticle(RealParticle copy) {
         physics = new Physics(copy.physics);
         animation = new TextureAnimation(copy.animation);
         texture = copy.texture;
+        originMatrix = new Matrix4f(copy.originMatrix);
     }
     
     public RealParticle(Texture texture, TextureAnimation animation) {
         this.texture = texture;
         this.animation = animation;
+        this.originMatrix = new Matrix4f().identity(); 
     }
     
     public RealParticle(Texture texture, int frameCount, boolean continuous) {
-        this.texture = texture;
-        this.animation = new TextureAnimation(frameCount, continuous);
+        this(texture, new TextureAnimation(frameCount, continuous));
     }
     
     public RealParticle setTransform(MeshTransform transform){
@@ -45,10 +48,8 @@ public class RealParticle {
     
     public void render(){
         update();
-        
-        Shader.currentlyBound.setUniform("particleOriginTransform", new Matrix4f().identity());
-        
-        Shader.currentlyBound.setUniform("particleTransform", physics.getTransfromationMatrix());
+        Shader.currentlyBound.setUniform("originMatrix", originMatrix);
+        Shader.currentlyBound.setUniform("transformMatrix", physics.getTransfromationMatrix());
         
         animation.set();
         texture.bind();
@@ -64,51 +65,4 @@ public class RealParticle {
         physics.setData(jsonObject);
         return this;
     }
-    
-    class TextureAnimation{
-        int currentFrame = 0;
-        int frameCount = 1;
-        
-        boolean continuous;
-        
-        public TextureAnimation(TextureAnimation copy) {
-            frameCount = copy.frameCount;
-            currentFrame = copy.currentFrame;
-            continuous = copy.continuous;
-        }
-        
-        public TextureAnimation(int frameCount, boolean continuous) {
-            this.frameCount = frameCount;
-            this.continuous = continuous;
-        }
-
-        public void setCurrentFrame(int currentFrame) {
-            this.currentFrame = currentFrame;
-        }
-        
-        public void setContinuous(boolean continuous) {
-            this.continuous = continuous;
-        }
-        
-        public boolean isCompleted(){
-            return !continuous && currentFrame == frameCount;
-        }
-        
-        public void set(){
-            Shader.currentlyBound.setUniformi("frameCount", frameCount);
-            Shader.currentlyBound.setUniformi("currentFrame", currentFrame);
-        }
-        
-        public void update(){
-            if(currentFrame < frameCount)
-                currentFrame++;
-            else if (continuous)
-                currentFrame = 0;
-        }
-    }
-
-    
-
-
-    
 }

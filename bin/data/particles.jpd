@@ -2,10 +2,10 @@
 	"smokePuff" : {
 		"texture" : "smoke2",
 		"frameCount" : 40,
-		"continuous" : false,
+		"continuous" : true,
 		"physicProps" : 6,
 		"physicsData" : {
-			"density" : 1.23
+			"density" : 1.22
 		}
 	}
 }

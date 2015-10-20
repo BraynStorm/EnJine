@@ -28,8 +28,8 @@ public class Camera {
 	private Vector3f up;
 	private Vector3f forward;
 	
-	private Matrix4f translationMatrix;
-	private Matrix4f rotationMatrix;
+	private Matrix4f rotationMatrix = new Matrix4f();
+	private Matrix4f translationMatrix = new Matrix4f();
 	
 	private float xRot;
 	private float yRot;
@@ -42,6 +42,8 @@ public class Camera {
 	private Vector2i mouseEnterPoint = new Vector2i(0, 0);
 	private Mouse mouse;
 	
+	private boolean isMatrixDirty = true;
+	
 	public Camera(){
 		pos = new Vector3f(0,0,0);
 		forward = new Vector3f(0,0,1);
@@ -53,9 +55,6 @@ public class Camera {
 		
 		EventManager.register(this);
 		mouse = EventManager.getMouse();
-		
-		recalcTranslationMatrix();
-		recalcRotationMatrix();
 	}
 	
 	public void setLock(boolean v){
@@ -87,18 +86,18 @@ public class Camera {
 		System.out.println("New setting, movementSpeed : " + Defaults.CAMERA_ROTATION_SPEED);
 	}
 	
-	public void setTranslationMatrix(){
-		Shader.currentlyBound.setUniform("camera_translation", translationMatrix);
-	}
-	
-	public void setRotationMatrix(){
-		Shader.currentlyBound.setUniform("camera_rotation", rotationMatrix);
+	public void setViewMatrix(){
+	    if(isMatrixDirty){
+	        recalcMatrix();
+	        isMatrixDirty = false;
+	    }
+	    
+	    Shader.currentlyBound.setUniform("viewMatrixT", translationMatrix);
+	    Shader.currentlyBound.setUniform("viewMatrixR", rotationMatrix);
 	}
 	
 	public void loop(){
-		setRotationMatrix();
-		setTranslationMatrix();
-		
+	    
 		/* Keyboard */
 		if(!isPosLocked()){
 			if(keysPushed[GLFW.GLFW_KEY_W]){
@@ -170,28 +169,28 @@ public class Camera {
 	}
 
 	public void move(Vector3f dir, float amount){
-		pos = pos.getAdd(dir.getMul(amount));
-		recalcTranslationMatrix();
+	    pos.add(dir.getMul(amount));
+		markDirty();
 	}
 	
 	public void moveForward(float amount){
-		pos = pos.getAdd(forward.getMul(amount));
-		recalcTranslationMatrix();
+	    pos = pos.getAdd(forward.getMul(amount));
+		markDirty();
 	}
 	
 	public void moveBackward(float amount){
-		pos = pos.getAdd(forward.getInverted().getMul(amount));
-		recalcTranslationMatrix();
+	    pos = pos.getAdd(forward.getInverted().mul(amount));
+		markDirty();
 	}
 	
 	public void moveLeft(float amount){
-		pos = pos.getAdd(getRight().getMul(amount));
-		recalcTranslationMatrix();
+	    pos = pos.getAdd(getRight().getMul(amount));
+		markDirty();
 	}
 	
 	public void moveRight(float amount){
-		pos = pos.getAdd(getLeft().getMul(amount));
-		recalcTranslationMatrix();
+	    pos = pos.getAdd(getLeft().getMul(amount));
+		markDirty();
 	}
 	
 	public Vector3f getLeft(){
@@ -237,7 +236,7 @@ public class Camera {
 		forward.rotate(angle, horizontalAxis).normalize();
 		up = forward.cross(horizontalAxis).normalize();
 		
-		recalcRotationMatrix();
+		markDirty();
 	}
 	
 	public void rotateY(float angle){
@@ -252,18 +251,16 @@ public class Camera {
 		forward.rotate(angle, Y_AXIS).normalize();
 		up = forward.cross(horizontalAxis).normalize();
 		
-		recalcRotationMatrix();
+		markDirty();
 	}
 	
-	private void recalcTranslationMatrix(){ translationMatrix = getTranslationMatrix(); }
-	private void recalcRotationMatrix(){ rotationMatrix = getRotationMatrix(); }
-	
-	public Matrix4f getTranslationMatrix(){
-		return new Matrix4f().translate(pos.getInverted());
+	private void markDirty(){
+	    isMatrixDirty = true;
 	}
 	
-	public Matrix4f getRotationMatrix(){
-		return new Matrix4f().camera(forward, up);
+	private void recalcMatrix(){
+	    rotationMatrix.camera(forward, up);
+	    translationMatrix.translate(pos.getInverted());
 	}
 	
 	public Vector3f getPosition(){

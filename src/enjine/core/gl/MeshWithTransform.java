@@ -1,6 +1,6 @@
 package enjine.core.gl;
 
-public class MeshWithTransform implements Transformable {
+public class MeshWithTransform implements Transformable3D {
 	protected Mesh mesh;
 	protected MeshTransform transform;
 	

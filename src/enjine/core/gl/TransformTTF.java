@@ -8,13 +8,9 @@ public class TransformTTF extends TransformRectangle{
 	
 	@Override
 	public void recalculateMatrix() {
-		Matrix4f t = new Matrix4f().translate(translation);
-		Matrix4f r = new Matrix4f().rotate(rotation);
-		Matrix4f s = new Matrix4f().scale(scale.x, scale.y * Window.getAspectRatio(), scale.z);
+		super.recalculateMatrix();
 		
-		Matrix4f offset_mat = new Matrix4f().translate(moved, 0, 0);
-		
-		transformation = t.mul(s.mul(r.mul(offset_mat)));
+		transformation = transformation.mul(new Matrix4f().translate(moved,0,0));
 	}
 	
 	public TransformTTF(){
@@ -27,6 +23,6 @@ public class TransformTTF extends TransformRectangle{
 	
 	public void addMovement(float amount){
 		moved += amount;
-		recalculateMatrix();
+		markDirty();
 	}
 }

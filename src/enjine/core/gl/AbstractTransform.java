@@ -10,24 +10,23 @@ public abstract class AbstractTransform {
 	protected Vector3f scale;
 	protected Matrix4f transformation;
 	
+	protected boolean isMatrixDirty = true;
+	
 	protected abstract void recalculateMatrix();
 
 	public AbstractTransform() {
 		translation = new Vector3f(0, 0, 0);
 		rotation = new Vector3f(0, 0, 0);
 		scale = new Vector3f(1, 1, 1);
-		
-		recalculateMatrix();
 	}
 	
 	public AbstractTransform(AbstractTransform t){
 		translation = new Vector3f(t.translation);
 		rotation = new Vector3f(t.rotation);
 		scale = new Vector3f(t.scale);
-		
-		recalculateMatrix();
 	}
 	
+	protected void markDirty(){ isMatrixDirty = true; }
 	
 	/**
 	 * Best Eclipse Feature EU!
@@ -97,5 +96,12 @@ public abstract class AbstractTransform {
 	 * Don't modify.
 	 * @return the scale vector
 	 */
-	public Matrix4f getTransformation(){ return transformation; }
+	public Matrix4f getTransformation(){
+	    if(isMatrixDirty){
+	        recalculateMatrix();
+	        isMatrixDirty = false;
+	    }
+	    
+	    return transformation;
+	}
 }

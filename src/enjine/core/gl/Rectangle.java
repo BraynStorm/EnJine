@@ -4,7 +4,7 @@ import org.lwjgl.opengl.GL15;
 
 import enjine.core.utils.Common;
 
-public class Rectangle implements IRenderable {
+public class Rectangle implements IRenderable, Transformable2D {
 	private static int[] VBO = new int[5];
 	private static int IBO;
 	private static final int DRAW_COUNT = 6;
@@ -16,8 +16,8 @@ public class Rectangle implements IRenderable {
 		
 		float drawLevel = DrawLevel.LOWMOST_LEVEL.getZValue();
 		VBO[Origin.TOPLEFT] = Common.bufferData(GL15.GL_ARRAY_BUFFER,
-				0, 0, drawLevel, 0, 0,
-				2, 0, drawLevel, 1, 0,
+				0, 0,  drawLevel, 0, 0,
+				2, 0,  drawLevel, 1, 0,
 			 	2, -2, drawLevel, 1, 1,
 				0, -2, drawLevel, 0, 1
 		);
@@ -40,10 +40,10 @@ public class Rectangle implements IRenderable {
 				-2, 0, drawLevel, 0, 1
 		);
 		VBO[Origin.CENTER] = Common.bufferData(GL15.GL_ARRAY_BUFFER,
-				-1,  1, drawLevel, 0, 1,
-				 1,  1, drawLevel, 1, 1,
-			 	 1, -1, drawLevel, 1, 0,
-				-1, -1, drawLevel, 0, 0
+				-1,  1, drawLevel, 0, 0,
+				 1,  1, drawLevel, 1, 0,
+			 	 1, -1, drawLevel, 1, 1,
+				-1, -1, drawLevel, 0, 1
 		);
 		
 		IBO = Common.bufferData(GL15.GL_ELEMENT_ARRAY_BUFFER,
@@ -57,9 +57,9 @@ public class Rectangle implements IRenderable {
 	private int origin = 0;
 	
 	
-	public TransformRectangle transform;
-	public GLColor color = Common.randomColor(false);
-	public Texture texture;
+	protected TransformRectangle transform;
+	protected GLColor color = Common.randomColor(false);
+	protected Texture texture;
 	
 	public Rectangle(){
 		transform = new TransformRectangle();
@@ -88,8 +88,7 @@ public class Rectangle implements IRenderable {
 	
 	@Override
 	public void render() {
-		if(texture != null)
-			texture.bind();
+		Texture.bind(texture);
 		
 		Shader.currentlyBound.setUniform("color", color);
 		Shader.currentlyBound.setUniform("transform", transform.getTransformation());
@@ -116,5 +115,13 @@ public class Rectangle implements IRenderable {
 	public static int getDrawCount(){
 		return DRAW_COUNT;
 	}
+
+    @Override
+    public TransformRectangle getTransform() {
+        return transform;
+    }
+
+    @Override
+    public void transformationOccured(){ /* Noting to see here*/ }
 	
 }

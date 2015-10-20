@@ -2,10 +2,6 @@ package enjine.core.math;
 
 import java.util.Arrays;
 
-import com.google.common.eventbus.Subscribe;
-
-import enjine.core.event.types.WindowSizeEvent;
-import enjine.core.gl.Window;
 import enjine.core.utils.Defaults;
 
 public class Matrix4f {
@@ -13,6 +9,10 @@ public class Matrix4f {
 	
 	public Matrix4f(){
 		m = new float[4][4];
+	}
+	
+	public Matrix4f(Matrix4f copy){
+	    m = copy.m.clone();
 	}
 	
 	public Matrix4f mul(Matrix4f v){
@@ -77,6 +77,13 @@ public class Matrix4f {
 		m[1][0] = 0;				m[1][1] = v.y;				m[1][2] = 0;				m[1][3] = 0;
 		m[2][0] = 0;				m[2][1] = 0;				m[2][2] = v.z;				m[2][3] = 0;
 		m[3][0] = 0;				m[3][1] = 0;				m[3][2] = 0;				m[3][3] = 1;
+		
+		/* Drawn properly...
+		m[0][0] = v.x;    m[1][0] = 0;        m[2][0] = 0;        m[3][0] = 0;
+		m[0][1] = 0;      m[1][1] = v.y;      m[2][1] = 0;        m[3][1] = 0;
+		m[0][2] = 0;      m[1][2] = 0;        m[2][2] = v.z;      m[3][2] = 0;
+		m[0][3] = 0;      m[1][3] = 0;        m[2][3] = 0;        m[3][3] = 1;
+		*/
 		
 		return this;
 	}

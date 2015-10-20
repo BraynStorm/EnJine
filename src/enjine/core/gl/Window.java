@@ -10,7 +10,6 @@ import com.google.common.eventbus.Subscribe;
 import enjine.core.event.EventManager;
 import enjine.core.event.types.WindowSizeEvent;
 import enjine.core.math.Matrix4f;
-import enjine.core.math.Vector2f;
 import enjine.core.utils.Defaults;
 
 public class Window{

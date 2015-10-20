@@ -293,7 +293,7 @@ public class Common {
 		GL20.glVertexAttribPointer(1, 2, GL11.GL_FLOAT, false, hasNormals ? Vertex.SIZE : 20, 12); // texCoords
 		
 		if(hasNormals)
-			GL20.glVertexAttribPointer(2, 3, GL11.GL_FLOAT, false, Vertex.SIZE, 0); // normals
+			GL20.glVertexAttribPointer(2, 3, GL11.GL_FLOAT, false, Vertex.SIZE, 20); // normals
 		
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, ibo);
 		GL11.glDrawElements(GL11.GL_TRIANGLES, drawCount, GL11.GL_UNSIGNED_INT, 0);

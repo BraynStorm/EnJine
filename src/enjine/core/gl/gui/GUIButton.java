@@ -8,10 +8,11 @@ import enjine.core.event.types.MousePositionEvent;
 import enjine.core.gl.Rectangle;
 import enjine.core.gl.Texture;
 import enjine.core.gl.TransformRectangle;
+import enjine.core.gl.Transformable2D;
 import enjine.core.resources.ResourceManager;
 import enjine.core.utils.Common;
 
-public class GUIButton {
+public class GUIButton implements Transformable2D{
 	private Rectangle shape;
 	
 	private Texture normal;
@@ -41,7 +42,7 @@ public class GUIButton {
 			currentAction = 0;
 		}
 		
-		if(!Common.coordsInsideRectangle(event.x, event.y, shape.transform))
+		if(!Common.coordsInsideRectangle(event.x, event.y, shape.getTransform()))
 			return;
 		
 		if(event.isActionPress())
@@ -56,7 +57,7 @@ public class GUIButton {
 	
 	@Subscribe
 	public void hovered(MousePositionEvent event){
-		if(!Common.coordsInsideRectangle(event.x, event.y, shape.transform)){
+		if(!Common.coordsInsideRectangle(event.x, event.y, shape.getTransform())){
 			if(currentAction == -1)
 				currentAction = 0;
 			
@@ -68,18 +69,20 @@ public class GUIButton {
 	}
 
 	public TransformRectangle getTransform() {
-		return shape.transform;
+		return shape.getTransform();
 	}
 
 	public void render() {
 		if(currentAction == 0)
-			shape.texture = normal;
+			shape.setTexture(normal);
 		else if(currentAction == 1)
-			shape.texture = clicked;
+		    shape.setTexture(clicked);
 		else{
-			shape.texture = hovered;
+		    shape.setTexture(hovered);
 		}
 		
 		shape.render();
 	}
+
+    @Override public void transformationOccured(){ /* Noting to see here */ }
 }
