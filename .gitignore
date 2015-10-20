@@ -2,4 +2,4 @@
 bin/core/*
 bin/org/*
 bin/logs/*
-bin/data/meshes/*.mesh
+bin/data/meshes
