@@ -1,4 +1,4 @@
-package enjine.core.gl;
+package enjine.core.gl.gui;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -7,17 +7,18 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.system.windows.RECT;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.glBindBuffer;
 
 import de.matthiasmann.twl.utils.PNGDecoder.Format;
+import enjine.core.gl.GLColor;
+import enjine.core.gl.Shader;
+import enjine.core.gl.Texture;
 import enjine.core.utils.Common;
 
 public class TrueTypeFont {
@@ -34,6 +35,8 @@ public class TrueTypeFont {
 
 	private int textureWidth = 512;
 	private int textureHeight = 512;
+	
+	private int origin;
 	
 	private Font font;
 	private FontMetrics fontMetrics;
@@ -214,19 +217,18 @@ public class TrueTypeFont {
 		float realX2 = intObject.realW + realX1; // Right
 		float realY2 = intObject.realH + realY1; // Top
 		
-		
+		/*
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(4*5);
-		buffer.put(0)					.put(intObject.realH)		.put(0)	.put(realX1)		.put(realY1);
-		buffer.put(intObject.realW)		.put(intObject.realH)		.put(0)	.put(realX2)		.put(realY1);
-		buffer.put(intObject.realW)		.put(0)						.put(0)	.put(realX2)		.put(realY2);
-		buffer.put(0)					.put(0)						.put(0)	.put(realX1)		.put(realY2);
+		
+		buffer.put(0).put(0).put(0) .put(realX1)        .put(realY1);
+        buffer.put(2).put(0).put(0) .put(realX2)        .put(realY1);
+        buffer.put(2).put(-2).put(0) .put(realX2)        .put(realY2);
+        buffer.put(0).put(-2).put(0) .put(realX1)        .put(realY2);
 		
 		buffer.flip();
+		*/
 		
-		vboArray[i] = glGenBuffers();
-		glBindBuffer(GL_ARRAY_BUFFER, vboArray[i]);
-		glBufferData(GL_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		vboArray[i] = Rectangle.createRectangleVBO(origin, realX1, realY1, realX2, realY2);
 	}
 	
 	public int getWidth(String whatchars) {
@@ -270,7 +272,7 @@ public class TrueTypeFont {
 	public void drawString(TransformTTF transform, String whatchars, GLColor color) {
 		fontTexture.bind();
 		
-		transform.moved = 0;
+		transform.setMoved(0);
 		
 		for (int i = 0; i < whatchars.length(); i++) {
 			int charCurrent = whatchars.charAt(i);
@@ -284,29 +286,17 @@ public class TrueTypeFont {
 			IntObject intObject = charArray[charCurrent];
 			
 			if( intObject != null ) {
-			    transform.setWidth(intObject.width);
-				transform.setHeight(intObject.height);
-				
+			    transform.setWidth(intObject.width).setHeight(intObject.height);
+			    
 				Shader.currentlyBound.setUniform("transform", transform.getTransformation());
 				Shader.currentlyBound.setUniform("color", color);
 				//drawQuad(charCurrent);
-				Common.renderBO(Rectangle.getVBO(Origin.TOPLEFT), Rectangle.getIBO(), Rectangle.getDrawCount());
-				transform.moved += intObject.width;
+				Common.renderBO(vboArray[charCurrent], Rectangle.getIBO(), Rectangle.getDrawCount());
+				transform.addMovement(intObject.width * 2);
 			}
 		}
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
-	}
-
-	private void drawQuad(int index) {
-		
-		glBindBuffer(GL_ARRAY_BUFFER, vboArray[index]);
-		glVertexAttribPointer(0, 3, GL_FLOAT, false, 5 * 4, 0); // positions
-		glVertexAttribPointer(1, 2, GL_FLOAT, false, 5 * 4, 12); // texCoords
-		
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Rectangle.getIBO());
-		glDrawElements(GL_TRIANGLES, Rectangle.getDrawCount(), GL_UNSIGNED_INT, 0);
-		
 	}
 	
 	public float getSize() {

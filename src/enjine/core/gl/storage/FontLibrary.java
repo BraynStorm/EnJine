@@ -7,7 +7,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 
-import enjine.core.gl.TrueTypeFont;
+import enjine.core.gl.gui.TrueTypeFont;
 import enjine.core.utils.Common;
 
 public class FontLibrary {

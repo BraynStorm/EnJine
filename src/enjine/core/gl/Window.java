@@ -2,7 +2,6 @@ package enjine.core.gl;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GLContext;
 
 import com.google.common.eventbus.Subscribe;

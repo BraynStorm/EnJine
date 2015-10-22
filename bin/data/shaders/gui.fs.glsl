@@ -16,7 +16,7 @@ void main(){
   vec4 pixel = texture2D(diffuse, texCoord0);
   
   if(pixel.w == 0){
-    gl_FragColor = color;
+    discard;
   }else{
     gl_FragColor = blend(pixel, color);
   }

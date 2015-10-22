@@ -12,22 +12,22 @@ public class TransformRectangle extends AbstractTransform {
 	/**
 	 * In Pixels.
 	 */
-	private int width = 0;
+	protected int width = 0;
 	
 	/**
 	 * In Pixels.
 	 */
-	private int height = 0;
+	protected int height = 0;
 	
 	/**
 	 *  Position on screen SHOULD and WILL be defined as offset form the TopLeft corner of the screen.
 	 */
-	private int xPosition = 0;
+	protected int xPosition = 0;
 	
 	/**
 	 *  Position on screen SHOULD and WILL be defined as offset form the TopLeft corner of the screen.
 	 */
-	private int yPosition = 0;
+	protected int yPosition = 0;
 	
 	
 	
@@ -58,8 +58,8 @@ public class TransformRectangle extends AbstractTransform {
 		Matrix4f t = new Matrix4f().translate(translation);
 		Matrix4f r = new Matrix4f().rotate(rotation);
 		Matrix4f s = new Matrix4f().scale(
-				scale.x * ((float) width / (float)Window.getWidth()),
-				scale.y * ((float) height / (float)Window.getHeight()),
+				scale.x * ((float) width / Window.getWidth()),
+				scale.y * ((float) height / Window.getHeight()),
 				scale.z
 				);
 		
@@ -143,6 +143,14 @@ public class TransformRectangle extends AbstractTransform {
 	    markDirty();
 	    return this;
 	}
+	
+	public float getRealWidth(){
+        return (float)getWidth() / Window.getWidth();
+    }
+	
+	public float getRealHeight(){
+        return (float)getHeight() / Window.getHeight();
+    }
 	
 	public int getWidth(){return width;}
 	public int getHeight(){return height;}

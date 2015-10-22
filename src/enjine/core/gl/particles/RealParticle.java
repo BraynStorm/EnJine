@@ -4,9 +4,9 @@ import org.json.JSONObject;
 
 import enjine.core.gl.MeshTransform;
 import enjine.core.gl.Origin;
-import enjine.core.gl.Rectangle;
 import enjine.core.gl.Shader;
 import enjine.core.gl.Texture;
+import enjine.core.gl.gui.Rectangle;
 import enjine.core.gl.physics.Physics;
 import enjine.core.math.Matrix4f;
 import enjine.core.utils.Common;

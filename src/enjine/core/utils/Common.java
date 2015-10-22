@@ -19,6 +19,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL30;
 
 import enjine.core.gl.Face;
 import enjine.core.gl.GLColor;
@@ -92,6 +93,29 @@ public class Common {
 	public static int bufferData(int type, float... data){ return bufferData(createBuffer(data), type); }
 	/** Integer version of {@link Common#bufferData(int, float...)}. */
 	public static int bufferData(int type, int... data){ return bufferData(createBuffer(data), type); }
+	
+	public static int createVAO(int vbo, int ibo, boolean hasNormals){
+	    int vao = GL30.glGenVertexArrays();
+	    GL30.glBindVertexArray(vao);
+	    
+	    GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo);
+        GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, hasNormals ? Vertex.SIZE : 20, 0); // positions
+        GL20.glVertexAttribPointer(1, 2, GL11.GL_FLOAT, false, hasNormals ? Vertex.SIZE : 20, 12); // texCoords
+        
+        if(hasNormals)
+            GL20.glVertexAttribPointer(2, 3, GL11.GL_FLOAT, false, Vertex.SIZE, 20); // normals
+        
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, ibo);
+	    
+        /* XXX if rendering ever breakes try these:
+         * GL20.glEnableVertexAttribArray(0);
+         * GL20.glEnableVertexAttribArray(1);
+         * GL20.glEnableVertexAttribArray(2);
+         */
+        
+	    GL30.glBindVertexArray(0);
+	    return vao;
+	}
 	
 	/**
 	 * Creates a new {@link FloatBuffer} and fills it with data.
@@ -301,6 +325,16 @@ public class Common {
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 		
+	}
+	
+	/**
+	 * LOL IT'S SO MUCH EASIER!
+	 * @param ao Array Buffer handle
+	 * @param drawCount The amount of indices.
+	 */
+	public static void renderAO(int ao, int drawCount){
+	    GL30.glBindVertexArray(ao);
+	    GL11.glDrawElements(GL11.GL_TRIANGLES, drawCount, GL11.GL_UNSIGNED_INT, 0);
 	}
 	
 	/**

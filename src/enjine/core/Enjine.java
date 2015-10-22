@@ -9,14 +9,12 @@ import enjine.core.gl.GLColor;
 import enjine.core.gl.LightDirectional;
 import enjine.core.gl.Mesh;
 import enjine.core.gl.MeshTransform;
-import enjine.core.gl.Rectangle;
 import enjine.core.gl.Shader;
 import enjine.core.gl.Texture;
-import enjine.core.gl.TrueTypeFont;
 import enjine.core.gl.Window;
 import enjine.core.gl.gui.GUILabel;
+import enjine.core.gl.gui.Rectangle;
 import enjine.core.gl.particles.RealParticle;
-import enjine.core.gl.storage.FontLibrary;
 import enjine.core.math.Time;
 import enjine.core.resources.ResourceManager;
 
@@ -108,8 +106,8 @@ public class Enjine {
 		
 		/* FONTS */
 		GUILabel fpsLabel = new GUILabel();
-		fpsLabel.setFont("consolas", 12).setWidth(100).setHeight(50).setTranslationX(150).setTranslationY(100);
-		fpsLabel.setBackgroundColor(GLColor.WHITE);
+		fpsLabel.setFont("consolas", 50).setWidth(100).setHeight(50).setTranslationX(500).setTranslationY(25);
+		fpsLabel.setBackgroundColor(GLColor.CYAN);
 		
 		/**
 		 * Tesing Stuff
@@ -118,7 +116,7 @@ public class Enjine {
 		MeshTransform cannonTransfrom = new MeshTransform();
 		cannonTransfrom.setTranslationZ(2);
 		cannonTransfrom.setScale(1f);
-		Mesh naDakataChoveka = ResourceManager.getMesh("xyzHelper");
+		Mesh naDakataChoveka = ResourceManager.getMesh("cannon");
 		MeshTransform chovekaTransform = new MeshTransform();
 		chovekaTransform.setTranslationZ(2f).setScale(1f);
 		RealParticle smoke = ResourceManager.getAnimatedParticle("smokePuff");

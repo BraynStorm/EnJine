@@ -1,5 +1,7 @@
-package enjine.core.gl;
+package enjine.core.gl.gui;
 
+import enjine.core.gl.DrawLevel;
+import enjine.core.gl.TransformRectangle;
 import enjine.core.math.Vector3f;
 
 public interface Transformable2D {

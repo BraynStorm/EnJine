@@ -2,12 +2,8 @@ package enjine.core.gl.gui;
 
 import enjine.core.gl.GLColor;
 import enjine.core.gl.Origin;
-import enjine.core.gl.Rectangle;
 import enjine.core.gl.Texture;
 import enjine.core.gl.TransformRectangle;
-import enjine.core.gl.TransformTTF;
-import enjine.core.gl.Transformable2D;
-import enjine.core.gl.TrueTypeFont;
 import enjine.core.gl.storage.FontLibrary;
 
 public class GUILabel implements Transformable2D {
@@ -34,7 +30,7 @@ public class GUILabel implements Transformable2D {
         this.rectangle = rectangle;
         this.text = text;
         fontTransform = new TransformTTF();
-        textColor = GLColor.BLACK;
+        textColor = GLColor.TRANSPARENT;
         transformationOccured();
     }
     
@@ -61,8 +57,7 @@ public class GUILabel implements Transformable2D {
 
     @Override
     public void transformationOccured() {
-        //fontTransform.setTranslationX(rectangle.getTransform().getWidth() / -2);
-        //fontTransform.setTranslationY(rectangle.getTransform().getHeight() / -2);
-        System.out.println("occured");
+        fontTransform.setTranslationX((rectangle.getTransform().getWidth() / -2) + rectangle.getTransform().getXPosition());
+        fontTransform.setTranslationY((rectangle.getTransform().getHeight() / -2) + rectangle.getTransform().getYPosition());
     }
 }

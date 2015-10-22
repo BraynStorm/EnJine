@@ -5,10 +5,8 @@ import com.google.common.eventbus.Subscribe;
 import enjine.core.event.EventManager;
 import enjine.core.event.types.MouseButtonEvent;
 import enjine.core.event.types.MousePositionEvent;
-import enjine.core.gl.Rectangle;
 import enjine.core.gl.Texture;
 import enjine.core.gl.TransformRectangle;
-import enjine.core.gl.Transformable2D;
 import enjine.core.resources.ResourceManager;
 import enjine.core.utils.Common;
 
