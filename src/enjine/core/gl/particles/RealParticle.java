@@ -56,6 +56,14 @@ public class RealParticle {
         Common.renderBO(Rectangle.getVBO(Origin.CENTER), Rectangle.getIBO(), Rectangle.getDrawCount());
     }
     
+    public MeshTransform getTransform() {
+        return physics.getTransfrom();
+    }
+
+    public Physics getPhysics() {
+        return physics;
+    }
+
     public RealParticle setPhysicsProps(int props) {
         physics.setProps(props);
         return this;
@@ -64,5 +72,9 @@ public class RealParticle {
     public RealParticle setPhysicsData(JSONObject jsonObject) {
         physics.setData(jsonObject);
         return this;
+    }
+
+    public boolean isAnimationFinished() {
+        return animation.isCompleted();
     }
 }

@@ -1,5 +1,7 @@
 package enjine.core;
 
+import java.io.IOException;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
@@ -15,6 +17,9 @@ import enjine.core.gl.Window;
 import enjine.core.gl.gui.GUILabel;
 import enjine.core.gl.gui.Rectangle;
 import enjine.core.gl.particles.RealParticle;
+import enjine.core.gl.particles.tests.ParticleEffectCircleSmoker;
+import enjine.core.gl.storage.FontLibrary;
+import enjine.core.logging.Logger;
 import enjine.core.math.Time;
 import enjine.core.resources.ResourceManager;
 
@@ -72,7 +77,6 @@ public class Enjine {
 		
 		
 		/* General Stuff */
-		
 		ResourceManager.initializeParticles();
 		
 		/* Shapes */
@@ -92,6 +96,11 @@ public class Enjine {
 		guiShader.delete();
 		error();
 		Window.close();
+		try {
+            Logger.getInstance().close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 		
 	}
 	
@@ -105,21 +114,22 @@ public class Enjine {
 		camera = new Camera();
 		
 		/* FONTS */
-		GUILabel fpsLabel = new GUILabel();
-		fpsLabel.setFont("consolas", 50).setWidth(100).setHeight(50).setTranslationX(500).setTranslationY(25);
-		fpsLabel.setBackgroundColor(GLColor.CYAN);
+		GUILabel fpsLabel = new GUILabel(FontLibrary.requestFontWithSize("consolas", 24));
+		fpsLabel.setWidth(100).setHeight(50).setTranslationX(0).setTranslationY(0);
 		
 		/**
 		 * Tesing Stuff
 		 */
 		LightDirectional sun = LightDirectional.getSun();
 		MeshTransform cannonTransfrom = new MeshTransform();
-		cannonTransfrom.setTranslationZ(2);
+		cannonTransfrom.setTranslationZ(2f);
 		cannonTransfrom.setScale(1f);
-		Mesh naDakataChoveka = ResourceManager.getMesh("cannon");
-		MeshTransform chovekaTransform = new MeshTransform();
-		chovekaTransform.setTranslationZ(2f).setScale(1f);
-		RealParticle smoke = ResourceManager.getAnimatedParticle("smokePuff");
+		Mesh justDakataThings = ResourceManager.getMesh("ball"); //TODO deal wtih stuff like cannon_Cube (regex)
+		MeshTransform dakataTransform = new MeshTransform();
+		dakataTransform.setTranslationZ(2f).setScale(1f);
+		
+		MeshTransform showerTransform = new MeshTransform().setTranslationY(2).setTranslationZ(2);
+		ParticleEffectCircleSmoker circleShowerEffect = new ParticleEffectCircleSmoker(10, 20, showerTransform);
 		
 		/*
 		 * End of Testing Stuff
@@ -142,14 +152,15 @@ public class Enjine {
 			worldShader.setUniform("projectionMatrix", Window.getProjectionMatrix());
 			camera.setViewMatrix();
 			sun.use();
-			naDakataChoveka.render(chovekaTransform);
+			//dakataTransform.rotateBy(0, 0f, 5f * (float)timer.getDeltaSeconds());
+			justDakataThings.render(dakataTransform);
 			
 			particleShader.bind();
 			particleShader.setUniform("projectionMatrix", Window.getProjectionMatrix());
 			particleShader.setUniformi("currentFrame", 0);
 			particleShader.setUniformi("frameCount", 1);
 			camera.setViewMatrix();
-			smoke.render();
+			
 			
 			guiShader.bind();
 			fpsLabel.setText(FPSManager.getFPS()).render();
@@ -170,7 +181,6 @@ public class Enjine {
 	 */
 	private static void error(){
 		int k = GL11.glGetError();
-		System.out.println(k);
 		while (k != 0){
 			k = GL11.glGetError();
 			System.out.println(k);

@@ -3,6 +3,8 @@ package enjine.core.math;
 import java.io.DataInputStream;
 import java.io.IOException;
 
+import org.json.JSONArray;
+
 public class Vector3f {
 
 	public static final Vector3f ZERO_ZERO_ZERO = new Vector3f(0,0,0);
@@ -22,6 +24,12 @@ public class Vector3f {
         this.y = f;
         this.z = f;
     }
+	
+	public Vector3f(JSONArray arr){
+	    this.x = (float) arr.getDouble(0);
+	    this.y = (float) arr.getDouble(1);
+	    this.z = (float) arr.getDouble(2);
+	}
 	
 	@Override
 	public String toString() {
@@ -102,7 +110,7 @@ public class Vector3f {
 		float rW = cosHalfAngle;
 		
 		Quaternion rot = new Quaternion(rX, rY, rZ, rW);
-		Quaternion w = rot.mul(this).mul(rot.conjugate());
+		Quaternion w = (rot.mul(this)).mul(rot.conjugate());
 		
 		x = w.x;
 		y = w.y;
@@ -253,12 +261,7 @@ public class Vector3f {
 	}
 
 	public static float getDistance(Vector3f head, Vector3f vertexPosition) {
-		return (float) Math.sqrt
-		(
-			Math.pow(head.x - vertexPosition.x, 2) +
-			Math.pow(head.y - vertexPosition.y, 2) +
-			Math.pow(head.z - vertexPosition.z, 2)
-		);
+		return (float) Math.sqrt(getDistanceSquared(head, vertexPosition));
 	}
 	
 	public static float getDistanceSquared(Vector3f head, Vector3f vertexPosition) {

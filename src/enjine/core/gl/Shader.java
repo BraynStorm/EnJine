@@ -14,6 +14,7 @@ import org.lwjgl.opengl.GL45;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 
+import enjine.core.logging.Logger;
 import enjine.core.math.Matrix4f;
 import enjine.core.math.Vector2f;
 import enjine.core.math.Vector3f;
@@ -117,8 +118,7 @@ public class Shader {
 		int handle = glGetUniformLocation(programID, uniform);
 		
 		if(handle == -1){ // a.k.a invalid
-			System.out.println("[ERROR] Couldn't find uniform " + uniform);
-			new Exception().printStackTrace();
+			Logger.getInstance().log(new Exception("[ERROR] Couldn't find uniform " + uniform));
 		}else{
 			uniforms.put(uniform, handle);
 		}

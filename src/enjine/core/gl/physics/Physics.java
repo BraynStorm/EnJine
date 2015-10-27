@@ -1,5 +1,6 @@
 package enjine.core.gl.physics;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import enjine.core.Enjine;
@@ -18,7 +19,7 @@ public class Physics {
     
     public static final Vector3f UP_VECTOR = new Vector3f(0, 1, 0);
     
-    public static final Vector3f GRAVITY_VECTOR = UP_VECTOR.getMul(-9.8f);
+    public static final Vector3f GRAVITY_VECTOR = UP_VECTOR.getMul(-9.8f/10);
     public static final Vector3f FLOAT_VECTOR = UP_VECTOR;
     
     
@@ -38,6 +39,7 @@ public class Physics {
         transfrom = new MeshTransform(copy.transfrom);
         properties = copy.properties;
         velocity = new Vector3f(copy.velocity);
+        density = copy.density;
     }
     
     
@@ -46,7 +48,7 @@ public class Physics {
      */
     public void update(){
         float deltaTime = (float) Enjine.timer.getDeltaSeconds();
-        float randomFactor = 0.0005f;
+        float randomFactor = 0.05f;
         
         if(getProp(AFFECTED_BY_GRAVITY))
             velocity.add(GRAVITY_VECTOR.getMul(deltaTime));
@@ -80,6 +82,10 @@ public class Physics {
         this.transfrom = new MeshTransform(transform);
     }
     
+    public MeshTransform getTransfrom() {
+        return transfrom;
+    }
+
     public Matrix4f getTransfromationMatrix() {
         return transfrom.getTransformation();
     }
@@ -107,6 +113,10 @@ public class Physics {
     public void setData(JSONObject data) {
         if(data.has("density"))
             density = (float) data.getDouble("density");
+        
+        if(data.has("rotation")){
+            transfrom.setRotation(new Vector3f(data.getJSONArray("rotation")));
+        }
     }
     
     

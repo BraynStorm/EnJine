@@ -20,8 +20,8 @@ void main(){
 	
 		
 	if(pixel.w == 0.0){
-		pixel = vec4(1, 0, 0, 1);
-		//discard;
+		//pixel = vec4(1, 0, 0, 1);
+		discard;
 	}else{
 		float originalW = pixel.w;
 		pixel = blend(pixel, vec4(particleColor, 1));

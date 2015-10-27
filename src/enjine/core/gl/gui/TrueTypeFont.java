@@ -63,12 +63,13 @@ public class TrueTypeFont {
 		public float realH;
 	}
 	
-	public TrueTypeFont(Font font, String name, boolean antiAlias) {
+	public TrueTypeFont(Font font, String name, int origin, boolean antiAlias) {
 		
 		this.font = font;
 		this.fontSize = font.getSize();
 		this.antiAlias = antiAlias;
 		this.name = name;
+		this.origin = origin;
 		
 		createSet();
 	}

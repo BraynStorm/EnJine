@@ -15,15 +15,15 @@ out vec3 normal0;
 void main(){
   texCoord0 = texCoord;
   
-  
+  mat4 viewMatrix = viewMatrixR * viewMatrixT;
   vec4 pos = vec4(position, 1);
   
   // Unsure....
   //transpose(inverse(transformMatrix)) * 
   //normal0 = (transpose(inverse(transformMatrix)) * vec4(position, 0)).xyz;
-  normal0 = (transpose(inverse(transformMatrix)) * vec4(normal, 0)).xyz;
+  normal0 = (transpose(inverse(viewMatrixT * transformMatrix)) * vec4(normal, 0)).xyz;
   
   
-  gl_Position = projectionMatrix * viewMatrixR * viewMatrixT * transformMatrix * pos;
+  gl_Position = projectionMatrix * viewMatrix * transformMatrix * pos;
   //gl_Position = vec4(position, 1);
 }

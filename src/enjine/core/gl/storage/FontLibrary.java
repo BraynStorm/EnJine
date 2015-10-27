@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 
+import enjine.core.gl.Origin;
 import enjine.core.gl.gui.TrueTypeFont;
 import enjine.core.utils.Common;
 
@@ -21,7 +22,7 @@ public class FontLibrary {
 		try {
 			Font awtFont = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(Common.dataFolder + "fonts/" + fontName + ".ttf"));
 			awtFont = awtFont.deriveFont(style, size);
-			TrueTypeFont ttf = new TrueTypeFont(awtFont, fontName, true);
+			TrueTypeFont ttf = new TrueTypeFont(awtFont, fontName, Origin.TOPLEFT, true);
 			fontLibrary.put(fontName, ttf);
 			return ttf;
 		} catch (FontFormatException | IOException e) {

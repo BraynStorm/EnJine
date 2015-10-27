@@ -40,4 +40,12 @@ public class MeshTransform extends AbstractTransform {
 	public MeshTransform setScale(float s) { scale = new Vector3f(s,s,s); markDirty(); return this; }
 	
 	public MeshTransform translateBy(Vector3f t) { translation.add(t); markDirty(); return this; }
+
+    public MeshTransform rotateBy(float x, float y, float z) {
+        rotation.x += x;
+        rotation.y += y;
+        rotation.z += z;
+        markDirty();
+        return this;
+    }
 }

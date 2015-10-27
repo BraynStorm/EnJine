@@ -139,9 +139,12 @@ public class Camera {
 				rotateY((float)(mouse.getX() - mouseEnterPoint.x)
 						* Defaults.CAMERA_ROTATION_SPEED);
 			
+			GLFW.glfwSetInputMode(Window.getID(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
+			
 			mouseEnterPoint.x = mouse.getX();
 			mouseEnterPoint.y = mouse.getY();
-		}
+		}else
+		    GLFW.glfwSetInputMode(Window.getID(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL); // TODO: check if the mouse has been down the last cycle cuz this can cause some perforamce issues
 	}
 	
 	public boolean isRotXLocked() {

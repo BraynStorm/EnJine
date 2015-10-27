@@ -5,6 +5,7 @@ import enjine.core.gl.Origin;
 import enjine.core.gl.Texture;
 import enjine.core.gl.TransformRectangle;
 import enjine.core.gl.storage.FontLibrary;
+import enjine.core.resources.ResourceManager;
 
 public class GUILabel implements Transformable2D {
 
@@ -14,21 +15,23 @@ public class GUILabel implements Transformable2D {
     protected String text;
     protected GLColor textColor;
     
-    public GUILabel() {
-        this("");
+    public GUILabel(TrueTypeFont font) {
+        this(font, "");
     }
     
-    public GUILabel(String text) {
-        this(new TransformRectangle(), "");
+    public GUILabel(TrueTypeFont font, String text) {
+        this(font, new TransformRectangle(), "");
     }
     
-    public GUILabel(TransformRectangle transform, String text) {
-        this(new Rectangle(transform).setOrigin(Origin.CENTER), text);
+    public GUILabel(TrueTypeFont font, TransformRectangle transform, String text) {
+        this(font, new Rectangle(transform).setOrigin(Origin.CENTER), text);
     }
     
-    public GUILabel(Rectangle rectangle, String text) {
+    public GUILabel(TrueTypeFont font, Rectangle rectangle, String text) {
         this.rectangle = rectangle;
+        rectangle.setTexture(ResourceManager.getTexture("default_label"));
         this.text = text;
+        this.font = font;
         fontTransform = new TransformTTF();
         textColor = GLColor.TRANSPARENT;
         transformationOccured();
@@ -57,7 +60,7 @@ public class GUILabel implements Transformable2D {
 
     @Override
     public void transformationOccured() {
-        fontTransform.setTranslationX((rectangle.getTransform().getWidth() / -2) + rectangle.getTransform().getXPosition());
-        fontTransform.setTranslationY((rectangle.getTransform().getHeight() / -2) + rectangle.getTransform().getYPosition());
+        fontTransform.setTranslationX(rectangle.getTransform().getXPosition());
+        fontTransform.setTranslationY(rectangle.getTransform().getYPosition());
     }
 }
