@@ -14,11 +14,11 @@ import org.lwjgl.opengl.GL45;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 
-import enjine.core.logging.Logger;
-import enjine.core.math.Matrix4f;
-import enjine.core.math.Vector2f;
-import enjine.core.math.Vector3f;
-import enjine.core.math.Vector4f;
+import braynstorm.commonlib.Logger;
+import braynstorm.commonlib.math.Matrix4f;
+import braynstorm.commonlib.math.Vector2f;
+import braynstorm.commonlib.math.Vector3f;
+import braynstorm.commonlib.math.Vector4f;
 import enjine.core.utils.Common;
 
 public class Shader {
@@ -118,7 +118,7 @@ public class Shader {
 		int handle = glGetUniformLocation(programID, uniform);
 		
 		if(handle == -1){ // a.k.a invalid
-			Logger.getInstance().log(new Exception("[ERROR] Couldn't find uniform " + uniform));
+			Logger.logExceptionWarning(new Exception("Couldn't find uniform " + uniform));
 		}else{
 			uniforms.put(uniform, handle);
 		}

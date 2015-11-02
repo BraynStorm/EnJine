@@ -1,5 +1,11 @@
 package enjine.core;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
+
+import braynstorm.commonlib.Logger;
+import enjine.core.utils.Common;
+
 public class Start {
 	
 	//public static Thread engineThread;
@@ -7,7 +13,7 @@ public class Start {
 	
 	//public static boolean f = true;
 	
-	public static void main(String[] args){
+	public static void main(String[] args) throws UnknownHostException, IOException{
 		/*engine = new Engine();
 		engineThread = new Thread(engine);
 		engineThread.start();
@@ -22,9 +28,28 @@ public class Start {
 		}
 		
 		RoskoEngine.stop();*/
-		Enjine.init();
-		Enjine.start();
-		Enjine.destroy();
+		Logger.init(Common.gameFolder);
+	    
+	    Network network = new Network();
+	    Thread networkThread = new Thread(network);
+	    networkThread.start();
+	    
+	    try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+	    
+	    synchronized (networkThread) {
+	        for(byte i=0;i < 2; i++)
+	            network.sendData(new byte[]{i});
+        }
+	    
+	    
+	    //Enjine.init();
+		//Enjine.start();
+		//Enjine.destroy();
 	}
 	
 }

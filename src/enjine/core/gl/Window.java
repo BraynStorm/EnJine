@@ -6,9 +6,9 @@ import org.lwjgl.opengl.GLContext;
 
 import com.google.common.eventbus.Subscribe;
 
+import braynstorm.commonlib.math.Matrix4f;
 import enjine.core.event.EventManager;
 import enjine.core.event.types.WindowSizeEvent;
-import enjine.core.math.Matrix4f;
 import enjine.core.utils.Defaults;
 
 public class Window{
@@ -41,7 +41,7 @@ public class Window{
 		
 		EventManager.register(this);
 		projectionMatrix = new Matrix4f();
-		projectionMatrix.updateProjection(width, height);
+		projectionMatrix.updateProjection(Defaults.fov, Defaults.zNear, Defaults.zFar, width, height);
 		
 		I = true;
 		return this;
@@ -101,7 +101,7 @@ public class Window{
 		height = event.height;
 		
 		GL11.glViewport(0, 0, width, height);
-		projectionMatrix.updateProjection(width, height);
+		projectionMatrix.updateProjection(Defaults.fov, Defaults.zNear, Defaults.zFar, width, height);
 		//Start.f = width < 1000;
 	}
 

@@ -4,15 +4,15 @@ import org.lwjgl.glfw.GLFW;
 
 import com.google.common.eventbus.Subscribe;
 
+import braynstorm.commonlib.math.Matrix4f;
+import braynstorm.commonlib.math.Vector2i;
+import braynstorm.commonlib.math.Vector3f;
 import enjine.core.event.EventManager;
 import enjine.core.event.Mouse;
 import enjine.core.event.types.KeyEvent;
 import enjine.core.event.types.MouseButtonEvent;
 import enjine.core.event.types.ScrollEvent;
 import enjine.core.gl.Shader;
-import enjine.core.math.Matrix4f;
-import enjine.core.math.Vector2i;
-import enjine.core.math.Vector3f;
 import enjine.core.utils.Common;
 import enjine.core.utils.Defaults;
 

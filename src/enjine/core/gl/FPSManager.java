@@ -1,6 +1,6 @@
 package enjine.core.gl;
 
-import enjine.core.math.Time;
+import braynstorm.commonlib.math.Time;
 import enjine.core.utils.Defaults;
 
 public class FPSManager {

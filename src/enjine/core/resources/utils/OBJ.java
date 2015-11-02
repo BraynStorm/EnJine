@@ -5,9 +5,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import braynstorm.commonlib.math.Vector2f;
+import braynstorm.commonlib.math.Vector3f;
 import enjine.core.gl.Face;
-import enjine.core.math.Vector2f;
-import enjine.core.math.Vector3f;
 import enjine.core.math.Vertex;
 
 public class OBJ {

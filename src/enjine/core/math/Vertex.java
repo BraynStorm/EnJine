@@ -1,10 +1,12 @@
 package enjine.core.math;
 
 import java.nio.FloatBuffer;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.lwjgl.BufferUtils;
+
+import braynstorm.commonlib.math.Vector2f;
+import braynstorm.commonlib.math.Vector3f;
 
 public class Vertex {
 

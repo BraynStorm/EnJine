@@ -1,8 +1,8 @@
 package enjine.core.gl.gui;
 
+import braynstorm.commonlib.math.Matrix4f;
 import enjine.core.gl.TransformRectangle;
 import enjine.core.gl.Window;
-import enjine.core.math.Matrix4f;
 
 public class TransformTTF extends TransformRectangle{
 

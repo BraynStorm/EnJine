@@ -2,10 +2,10 @@ package enjine.core.gl;
 
 import com.google.common.eventbus.Subscribe;
 
+import braynstorm.commonlib.math.Matrix4f;
+import braynstorm.commonlib.math.Vector3f;
 import enjine.core.event.EventManager;
 import enjine.core.event.types.WindowSizeEvent;
-import enjine.core.math.Matrix4f;
-import enjine.core.math.Vector3f;
 
 public class TransformRectangle extends AbstractTransform {
 	

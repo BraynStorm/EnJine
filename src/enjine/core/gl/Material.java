@@ -5,7 +5,7 @@ import java.util.Arrays;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import enjine.core.math.Vector3f;
+import braynstorm.commonlib.math.Vector3f;
 import enjine.core.resources.ResourceManager;
 import enjine.core.utils.Common;
 
@@ -87,9 +87,9 @@ public class Material {
         
         // String
         master.put("map_Kd", map_Kd.path);
-        master.put("map_Ks", ""); //TODO
-        master.put("map_Ke", ""); //TODO
-        master.put("map_Displ", ""); //TODO
+        master.put("map_Ks", ""); //TODO "map_Ks"
+        master.put("map_Ke", ""); //TODO "map_Ke"
+        master.put("map_Displ", ""); //TODO "map_Displ"
         
         return master;
     }

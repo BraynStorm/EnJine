@@ -15,12 +15,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.lwjgl.opengl.GL11;
 
+import braynstorm.commonlib.Logger;
+import braynstorm.commonlib.math.Vector2f;
+import braynstorm.commonlib.math.Vector3f;
 import de.matthiasmann.twl.utils.PNGDecoder;
 import de.matthiasmann.twl.utils.PNGDecoder.Format;
 import enjine.core.gl.Face;
@@ -29,15 +33,11 @@ import enjine.core.gl.Material;
 import enjine.core.gl.Mesh;
 import enjine.core.gl.Texture;
 import enjine.core.gl.particles.RealParticle;
-import enjine.core.logging.Logger;
-import enjine.core.logging.Logger.LogLevel;
-import enjine.core.math.Vector2f;
-import enjine.core.math.Vector3f;
 import enjine.core.math.Vertex;
 import enjine.core.utils.Common;
 
 /**
- * TODO: Should change to {@link Hashtable} when we get to threading.
+ * TODO: Should change to {@link ConcurrentHashMap} when we get to threading.
  * 
  * @author BraynStorm
  *        
@@ -75,12 +75,12 @@ public class ResourceManager {
         if(t == null){
             File potentialTextureFile = new File(Common.makeAbsoluteDataPath("textures/" + name + ".png"));
             if(!potentialTextureFile.exists() || potentialTextureFile.isDirectory()){
-                Logger.getInstance().log(LogLevel.WARNING, "Texture \""+ name +"\" couldn't be found.");
+                Logger.logWarning("Texture \""+ name +"\" couldn't be found.");
             }else{
                 try {
                     t = registerTexture(name, loadTexture(new FileInputStream(potentialTextureFile)));
                 } catch (IOException e) {
-                    Logger.getInstance().log(e);
+                    Logger.logExceptionWarning(e);
                 }
             }
         }
@@ -96,7 +96,7 @@ public class ResourceManager {
             if(!potentialMeshFile1.exists() || potentialMeshFile1.isDirectory()){
                 File potentialMeshFile2 = new File(Common.makeAbsoluteDataPath("meshes/" + name + ".obj"));
                 if(!potentialMeshFile2.exists() || potentialMeshFile2.isDirectory()){
-                    Logger.getInstance().log(LogLevel.WARNING, "Mesh \""+ name +"\" couldn't be found.");
+                    Logger.logWarning("Mesh \""+ name +"\" couldn't be found.");
                 }else{
                     mesh = registerMesh(name, loadMesh("meshes/" + name + ".obj"));
                 }
@@ -190,7 +190,7 @@ public class ResourceManager {
                 
                 writer.close();
             } catch (IOException e) {
-                Logger.getInstance().log(e);
+                Logger.logExceptionWarning(e);
             }
         });
     }
@@ -236,7 +236,7 @@ public class ResourceManager {
         try {
             lines = Common.readAllLinesToString(Common.makeAbsoluteDataPath(relMeshPath));
         } catch (IOException e) {
-            Logger.getInstance().log(e);
+            Logger.logExceptionWarning(e);
             return mesh;
         }
         
@@ -273,7 +273,7 @@ public class ResourceManager {
         }
         
         if(mesh == null)
-            Logger.getInstance().log(Logger.LogLevel.WARNING, "Trying to load an invalid mesh file. Skipping");
+            Logger.logWarning("Trying to load an invalid mesh file. Skipping");
         else{
             Matcher m = Common.patternMatchFilename.matcher(relMeshPath);
             m.find();
@@ -361,7 +361,7 @@ public class ResourceManager {
         }
         
         if(textureMap.containsValue(texture)){
-            Logger.getInstance().log(LogLevel.WARNING, "Texture with name \"" + name + "\" has already been loaded under a different name.");
+            Logger.logWarning("Texture with name \"" + name + "\" has already been loaded under a different name.");
             return texture;
         }
         
@@ -375,7 +375,7 @@ public class ResourceManager {
         }
         
         if(meshMap.containsValue(mesh)){
-            Logger.getInstance().log(LogLevel.WARNING, "Mesh with name \"" + name + "\" has already been loaded under a different name.");
+            Logger.logWarning("Mesh with name \"" + name + "\" has already been loaded under a different name.");
             return mesh;
         }
         

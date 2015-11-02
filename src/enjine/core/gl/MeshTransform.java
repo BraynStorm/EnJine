@@ -1,7 +1,7 @@
 package enjine.core.gl;
 
-import enjine.core.math.Matrix4f;
-import enjine.core.math.Vector3f;
+import braynstorm.commonlib.math.Matrix4f;
+import braynstorm.commonlib.math.Vector3f;
 
 public class MeshTransform extends AbstractTransform {
 
@@ -37,7 +37,7 @@ public class MeshTransform extends AbstractTransform {
 	public MeshTransform setScaleY(float y){ scale.y = y; markDirty(); return this; }
 	public MeshTransform setScaleZ(float z){ scale.z = z; markDirty(); return this; }
 	public MeshTransform setScale(Vector3f s){ scale = new Vector3f(s); markDirty(); return this; }
-	public MeshTransform setScale(float s) { scale = new Vector3f(s,s,s); markDirty(); return this; }
+	public MeshTransform setScale(float s) { scale = new Vector3f(s, s, s); markDirty(); return this; }
 	
 	public MeshTransform translateBy(Vector3f t) { translation.add(t); markDirty(); return this; }
 

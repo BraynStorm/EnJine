@@ -1,12 +1,11 @@
 package enjine.core.gl.physics;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
+import braynstorm.commonlib.math.Matrix4f;
+import braynstorm.commonlib.math.Vector3f;
 import enjine.core.Enjine;
 import enjine.core.gl.MeshTransform;
-import enjine.core.math.Matrix4f;
-import enjine.core.math.Vector3f;
 import enjine.core.utils.Common;
 
 /**
@@ -32,7 +31,7 @@ public class Physics {
     public Physics() {
         transfrom = new MeshTransform();
         properties = AFFECTED_BY_GRAVITY | AFFECTED_BY_DENSITY;
-        velocity = new Vector3f(Vector3f.ZERO_ZERO_ZERO);
+        velocity = new Vector3f(0, 0, 0);
     }
     
     public Physics(Physics copy){

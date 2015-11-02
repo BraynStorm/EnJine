@@ -1,6 +1,6 @@
 package enjine.core.gl;
 
-import enjine.core.math.Vector3f;
+import braynstorm.commonlib.math.Vector3f;
 
 public interface Transformable3D{
 	MeshTransform getTransform();

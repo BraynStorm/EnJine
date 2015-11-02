@@ -1,6 +1,6 @@
 package enjine.core.gl;
 
-import enjine.core.math.Vector4f;
+import braynstorm.commonlib.math.Vector4f;
 
 public class GLColor extends Vector4f {
 	

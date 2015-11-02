@@ -1,5 +1,6 @@
 package enjine.core.math;
 
+import braynstorm.commonlib.math.Vector3f;
 import enjine.core.gl.AbstractTransform;
 
 public class Spiral {

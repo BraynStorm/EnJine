@@ -10,24 +10,21 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
+import braynstorm.commonlib.Logger;
+import braynstorm.commonlib.math.Vector2f;
+import braynstorm.commonlib.math.Vector3f;
 import enjine.core.gl.Face;
 import enjine.core.gl.GLColor;
-import enjine.core.gl.Shader;
 import enjine.core.gl.TransformRectangle;
-import enjine.core.logging.Logger;
-import enjine.core.math.Vector2f;
-import enjine.core.math.Vector3f;
 import enjine.core.math.Vertex;
 
 public class Common {
@@ -297,8 +294,7 @@ public class Common {
 	 * @param e The {@link Exception} that was thrown in order to kill the program.
 	 */
 	public static void killProgram(Exception e){
-		Logger.getInstance().log(e);
-		System.exit(1);
+		Logger.logExceptionCritical(e);
 	}
 	
 	/** Renders a VBO/IBO/DrawCount pair on the screen. See {@link Common#renderBO(int, int, int, boolean)} for more information. */

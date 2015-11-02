@@ -2,9 +2,9 @@ package enjine.core.gl;
 
 import com.google.common.eventbus.Subscribe;
 
+import braynstorm.commonlib.math.Vector3f;
 import enjine.core.event.EventManager;
 import enjine.core.event.types.ScrollEvent;
-import enjine.core.math.Vector3f;
 
 /**
  * A.K.A Sun.
