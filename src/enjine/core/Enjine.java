@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
+import braynstorm.commonlib.Logger;
 import braynstorm.commonlib.math.Time;
 import enjine.core.gl.Camera;
 import enjine.core.gl.FPSManager;
@@ -20,7 +21,6 @@ import enjine.core.gl.gui.Rectangle;
 import enjine.core.gl.particles.RealParticle;
 import enjine.core.gl.particles.tests.ParticleEffectCircleSmoker;
 import enjine.core.gl.storage.FontLibrary;
-import enjine.core.logging.Logger;
 import enjine.core.resources.ResourceManager;
 
 public class Enjine {
@@ -96,11 +96,6 @@ public class Enjine {
 		guiShader.delete();
 		error();
 		Window.close();
-		try {
-            Logger.getInstance().close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 		
 	}
 	
