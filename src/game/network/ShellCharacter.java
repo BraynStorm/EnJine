@@ -2,6 +2,7 @@ package game.network;
 
 import game.items.ItemStack;
 
+import java.nio.ByteBuffer;
 import java.util.Map;
 
 public class ShellCharacter {
@@ -18,4 +19,16 @@ public class ShellCharacter {
 		this.equipment = equipment;
 	}
 	
+	public static ShellCharacter createFromPacket(ByteBuffer packet){
+		int raceData = 0;
+		Map<Character, ItemStack> equipment = null;
+		
+		StringBuilder sbName = new StringBuilder();
+		StringBuilder sbZoneName = new StringBuilder();
+		
+		//packet.
+		
+		
+		return new ShellCharacter(sbName.toString(), sbZoneName.toString(), raceData, equipment);
+	}
 }

@@ -1,9 +1,13 @@
 package game.items;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ItemStack {
 	private Item item;
 	private int metadata;
 	private int amount;
+	private List<Enchantment> enchantments;
 	
 	public ItemStack(Item item){
 		this(item, 0, 1);
@@ -20,6 +24,7 @@ public class ItemStack {
 	public ItemStack(Item item, int metadata, int amount){
 		this.item = item;
 		this.amount = amount;
+		enchantments = new ArrayList<>(2);
 	}
 
 	public int getMetadata() {
@@ -36,6 +41,10 @@ public class ItemStack {
 
 	public Item getItem() {
 		return item;
+	}
+
+	public void enchant(Enchantment ench) {
+		this.enchantments.add(ench);
 	}
 	
 	

@@ -1,4 +1,4 @@
-package enjine.core;
+package game.network;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -10,18 +10,48 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import braynstorm.commonlib.Logger;
+import braynstorm.commonlib.network.PacketSize;
+import braynstorm.commonlib.network.PacketType;
 
 public class Network implements Runnable {
     
-    public List<ByteBuffer> dataToSend = Collections.synchronizedList(new ArrayList<ByteBuffer>());
+    public ConcurrentLinkedQueue<ByteBuffer> dataToSend = new ConcurrentLinkedQueue<>();
+    public ConcurrentLinkedDeque<Byte> incomingData = new ConcurrentLinkedDeque<>();
+    private ByteBuffer tempReadBuffer = ByteBuffer.allocate(1024);
+    private ByteBuffer tempProcessBuffer = ByteBuffer.allocate(1024);
+    
     private Selector selector;
     
     public void sendData(ByteBuffer buffer){
         synchronized (dataToSend) {
             dataToSend.add(buffer);
         }
+    }
+    
+    private boolean tryProcessPacket(){
+    	
+    	if(!incomingData.isEmpty()){
+    		tempProcessBuffer.put(incomingData.poll()); // Type
+    		tempProcessBuffer.put(incomingData.poll()); // Type
+    		tempProcessBuffer.put(incomingData.poll()); // Len
+    		tempProcessBuffer.put(incomingData.poll()); // Len
+    		tempProcessBuffer.flip();
+    		
+    		short type = tempProcessBuffer.getShort();
+    		short len = tempProcessBuffer.getShort();
+    		
+    		if(len >= incomingData.size()){
+    			tempProcessBuffer.clear();
+    			
+    		}
+    	}
+    		
+    	
+    	return false;
     }
     
     @Override
@@ -68,64 +98,44 @@ public class Network implements Runnable {
         }
         
     }
-
-    private void read(SelectionKey key) {
-        long timeStartedReading = System.currentTimeMillis();
-        SocketChannel channel = (SocketChannel) key.channel();
-        ByteBuffer header = ByteBuffer.allocate(Short.BYTES * 2);
-        
+    
+    void read(SelectionKey key){
+    	SocketChannel channel = (SocketChannel) key.channel();
+    	
         try {
-            while(header.remaining() > 0){
-                channel.read(header);
-                if(timeStartedReading > 500L + System.currentTimeMillis()){
-                    // Disconnect because of too much ping.
-                    channel.socket().close();
-                    channel.close();
-                    return;
-                }
-            }
+            if(channel.read(tempReadBuffer) == 0)
+                return;
             
-            header.flip();
-            ByteBuffer data = ByteBuffer.allocate(header.getShort(2));
+            tempReadBuffer.flip();
             
-            while(data.remaining() > 0){
-                channel.read(data);
-                if(timeStartedReading > 1500L + System.currentTimeMillis()){
-                    // Disconnect because of too much ping.
-                    channel.socket().close();
-                    channel.close();
-                    return;
-                }
-            }
+            while(tempReadBuffer.hasRemaining())
+            	incomingData.add(tempReadBuffer.get());
             
-            header.flip();
+            while(tryProcessPacket());
             
-            Logger.logInfo(header.array());
-            Logger.logInfo(data.array());
-            
+            tempReadBuffer.clear();
         } catch (IOException e) {
-            e.printStackTrace();
-            Thread.currentThread().interrupt();
+            Logger.logExceptionInfo(e);
+            // TODO close the connection
         }
+        
+        // Check for amount of data read.
+        key.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+        
+        
     }
 
     private void write(SelectionKey key) {
         SocketChannel socketChannel = (SocketChannel) key.channel();
         
-        synchronized (dataToSend) {
-            Iterator<ByteBuffer> it = dataToSend.iterator();
-            
-            if(it.hasNext()){
-                System.out.println("Writiing..");
-                try {
-                    socketChannel.write(it.next());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                
-                it.remove();
+        //FIXME Potential need of synchronization.
+    	while(!dataToSend.isEmpty()){
+    		try {
+                socketChannel.write(dataToSend.poll());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        }
+    	}
         
         key.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
     }
